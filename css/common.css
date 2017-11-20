@@ -1,0 +1,616 @@
+@charset "utf-8";
+/* CSS Document */
+* {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -o-box-sizing: border-box;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: #fff;
+    font-family: "SimHei";
+    font-size: 12px;
+}
+
+img {
+    border: none;
+}
+
+form {
+    margin: 0;
+}
+
+li, ul {
+    border: none;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+}
+
+img {
+    border: none;
+}
+
+.clear {
+    clear: both;
+}
+
+.clearfix:after {
+    content: ".";
+    display: block;
+    clear: both;
+    height: 0;
+    overflow: hidden;
+    font-size: 0;
+}
+
+textarea {
+    outline: medium none;
+    font-size: 12px;
+}
+
+i {
+    font-style: normal;
+}
+
+input {
+    color: inherit;
+    vertical-align: middle;
+    font-size: inherit;
+    font-family: inherit;
+}
+
+em {
+    font-style: normal;
+}
+
+.left {
+    float: left;
+}
+
+.right {
+    float: right;
+}
+
+/*头部*/
+.header {
+    position: relative;
+    background: #fff;
+    height: 3.75rem;
+    line-height: 3.75rem;
+    font-size: 1.45rem;
+    color: #000;
+    border-bottom: 1px solid #eeeeee;
+    text-align: center;
+}
+
+.returnimg {
+    position: absolute;
+    left: 1.87rem;
+    top: 1.194rem;
+    width: 0.725rem;
+}
+
+.header .more {
+    position: absolute;
+    right: 1.87rem;
+    font-size: 1.28rem;
+    color: #04d29d;
+}
+
+.blackbg {
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.morelist {
+    display: none;
+    width: 9.94rem;
+    position: absolute;
+    top: 4.1rem;
+    right: 1.45rem;
+    z-index: 3;
+}
+
+.morebg {
+    position: absolute;
+    right: 0.68rem;
+    top: -0.81rem;
+    height: 0.81rem;
+}
+
+.moredetail {
+    background: #fff;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+    text-align: center;
+    padding: 0.2rem 0;
+}
+
+.moredetail li {
+    line-height: 2.98rem;
+}
+
+.moredetail li a {
+    font-size: 1.28rem;
+    color: #000;
+}
+
+/*新闻分享模块*/
+.newscontent {
+    padding: 1.92rem 1.45rem 6.3rem;
+}
+
+.newscontent h2 {
+    font-size: 1.536rem;
+    color: #000;
+    line-height: 1.79rem;
+}
+
+.newsTime span {
+    font-size: 1.19rem;
+    color: #aaaaaa;
+    line-height: 2.98rem;
+}
+
+.newsTime span:nth-of-type(2) {
+    margin-left: 0.85rem;
+}
+
+.newsdetails p {
+    font-size: 1.28rem;
+    color: #555555;
+    line-height: 2.048rem;
+    text-indent: 2em;
+}
+
+.newsdetails img {
+    width: 100%;
+    vertical-align: top;
+    margin: 0.85rem auto;
+}
+
+.share-pannel {
+    background: #2f2f2f;
+    width: 100%;
+    height: 4.9rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+
+.share-close, .share-logo {
+    float: left;
+    position: relative;
+    height: 4.9rem;
+    line-height: 4.9rem;
+}
+
+.share-close {
+    width: 5.3%;
+    margin: 0 2% 0 2%;
+}
+
+.share-close img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.share-logo {
+    width: 9.3%;
+    margin-right: 2%;
+}
+
+.share-logo img {
+    width: 100%;
+    height: auto;
+    vertical-align: middle;
+}
+
+.share-txt {
+    float: left;
+    padding-top: 1.2rem;
+}
+
+.share-txt span {
+    display: block;
+    color: #fff;
+    font-size: 0.93rem;
+    line-height: 1.4rem;
+}
+
+.share-txt span em {
+    font-size: 1.28rem;
+}
+
+.share-open {
+    float: right;
+    font-size: 1.10rem;
+    color: #04d29d;
+    border: 2px solid #04d29d;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    padding: 0 0.7rem;
+    line-height: 2.1rem;
+    margin: 1.3rem 2% 0 0;
+}
+
+/*帮助中心*/
+.helpTitle {
+    background: #fff;
+    padding: 1.49rem 1.28rem;
+    border-bottom: 1px solid #dedede;
+}
+
+.helpTitle span {
+    font-size: 1.28rem;
+    color: #000;
+}
+
+.helpTitle .tipimg1 {
+    float: right;
+    background: url(../images/Instructions/icon1.png) no-repeat;
+    background-size: 100%;
+    width: 1.1rem;
+    height: 0.59rem;
+    margin-top: 0.4rem;
+}
+
+.helpTitle .tipimg2 {
+    float: right;
+    background: url(../images/Instructions/icon2.png) no-repeat;
+    background-size: 100%;
+    width: 1.1rem;
+    height: 0.59rem;
+    margin-top: 0.4rem;
+}
+
+.helpDetails {
+    display: none;
+}
+
+.helpDetails li p {
+    font-size: 1.28rem;
+    color: #000;
+    padding: 1.49rem 1.28rem;
+}
+
+.helpDetails li div {
+    display: none;
+    background: #fff;
+    padding: 1.0rem 1.28rem;
+    font-size: 1.19rem;
+    color: #000;
+    line-height: 1.62rem;
+    border-top: 1px solid #dedede;
+    border-bottom: 1px solid #dedede;
+}
+
+.helpList3 {
+    background: #fff;
+    padding: 1.49rem 1.28rem;
+    display: block;
+}
+
+.helpList3 span {
+    font-size: 1.28rem;
+    color: #000;
+}
+
+.helpList3 div {
+    float: right;
+    background: url(../images/Instructions/icon1.png) no-repeat;
+    background-size: 100%;
+    width: 1.1rem;
+    height: 0.59rem;
+    margin-top: 0.4rem;
+}
+
+.OnlineService {
+    background: #fff;
+    padding: 1.49rem 1.28rem;
+    margin-top: 0.85rem;
+    display: block;
+}
+
+.OnlineService span:nth-of-type(1) {
+    font-size: 1.28rem;
+    color: #000;
+}
+
+.OnlineService span:nth-of-type(2) {
+    font-size: 1.28rem;
+    color: #04d29d;
+    float: right;
+}
+
+/*意见反馈*/
+.feedback {
+    background: #fff;
+    padding: 0.85rem;
+    width: 90%;
+    height: 10.96rem;
+    border: 1px solid #dedede;
+    margin: 1.28rem auto 0;
+    font-size: 1.19rem;
+    color: #000;
+    display: block;
+}
+
+.feedbtn {
+    width: 84%;
+    height: 3.4rem;
+    line-height: 3.4rem;
+    background: #04d29d;
+    font-size: 1.53rem;
+    color: #fff;
+    border: none;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+    position: fixed;
+    bottom: 3.84rem;
+    left: 8%;
+}
+
+textarea:-moz-placeholder {
+    color: #aaaaaa;
+    font-family: SimHei;
+}
+
+textarea::-moz-placeholder {
+    color: #aaaaaa;
+    font-family: SimHei;
+}
+
+textarea:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #aaaaaa;
+    font-family: SimHei;
+}
+
+textarea::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #aaaaaa;
+    font-family: SimHei;
+}
+
+/*推荐有奖*/
+input:-moz-placeholder {
+    color: #aaa;
+    font-family: SimHei;
+}
+
+input::-moz-placeholder {
+    color: #aaa;
+    font-family: SimHei;
+}
+
+input:-ms-input-placeholder, textarea:-ms-input-placeholder {
+    color: #aaa;
+    font-family: SimHei;
+}
+
+input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
+    color: #aaa;
+    font-family: SimHei;
+}
+
+.tuijianBox img {
+    vertical-align: top;
+}
+
+.tuijianBox .img1 {
+    width: 100%;
+}
+
+.tuijianBox .img2 {
+    width: 53.6%;
+}
+
+.tuijianBox .img3 {
+    width: 21.504rem;
+}
+
+.tuijianBox .redpacket {
+    position: relative;
+    background: url("../images/Instructions/img2.png") no-repeat;
+    background-size: 100%;
+    width: 100%;
+    text-align: center;
+    margin-top: -1px;
+}
+
+.tuijianBox .redpacket .list1 {
+    position: absolute;
+    left: 10%;
+    top: 9.3rem;
+    width: 80%;
+}
+
+.tuijianBox .redpacket .list1 li {
+    font-size: 1.28rem;
+    color: #fff;
+    line-height: 1.5;
+}
+
+.tuijianBox .redpacket .list1 li:nth-of-type(3) {
+    color: #facf02;
+}
+
+.tuijianBox .redpacket .list1 li span {
+    font-size: 2.048rem;
+    font-weight: bold;
+}
+
+.tuijianBox form {
+    text-align: center;
+    margin-top: 2.56rem;
+}
+
+.tuijianBox form input {
+    width: 77%;
+    height: 4.0rem;
+    text-indent: 1em;
+    color: #555;
+    font-size: 1.28rem;
+    border: none;
+    background: #fff;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
+
+.tuijianBox form .link1 {
+    position: relative;
+    display: inline-block;
+    width: 77%;
+    padding: 1.0rem 0;
+    background: #f84629;
+    border-width: 5px 7px 5px 7px;
+    border-color: #fad07e;
+    border-style: solid;
+    font-size: 1.28rem;
+    color: #fff;
+    margin-top: 0.85rem;
+    -webkit-border-radius: 50px;
+    -moz-border-radius: 50px;
+    border-radius: 50px;
+}
+
+.tuijianBox form .link1 img {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+    width: 1.792rem;
+}
+
+.tuijianBox form .link2 {
+    font-size: 1.28rem;
+    color: #fff;
+    text-decoration: underline;
+    margin-top: 2.3rem;
+    display: inline-block;
+}
+
+.tuijianBox .redpacket .list2 {
+    position: absolute;
+    left: 10%;
+    top: 12.1rem;
+    width: 80%;
+}
+
+.tuijianBox .redpacket .list2 li {
+    font-size: 1.28rem;
+    color: #fff;
+    line-height: 1.5;
+}
+
+.tuijianBox .redpacket .list2 li:nth-of-type(1) {
+    font-size: 1.87rem;
+    font-weight: bold;
+}
+
+.tuijianBox .redpacket .list2 li:nth-of-type(3) {
+    font-size: 1.0rem;
+    color: #facf02;
+    margin-top: 1.7rem;
+}
+
+/*活动中心*/
+.activityCenter {
+    padding-bottom: 1.28rem;
+}
+
+.activityCenter .line {
+    display: block;
+    width: 92%;
+    margin: 1.28rem auto 0;
+}
+
+.activityCenter a {
+    display: block;
+    width: 92%;
+    margin: 1.28rem auto 0;
+}
+
+.activityCenter img {
+    vertical-align: top;
+    width: 100%;
+    border-radius: 5px
+}
+
+/*中奖纪录*/
+.zhongjiangList {
+    padding-bottom: 0.85rem;
+}
+
+.zhongjiangList li {
+    background: #fff;
+    padding: 1.28rem 1.45rem;
+    margin-top: 0.85rem;
+}
+
+.zhongjiangList li .prolink {
+    overflow: hidden;
+    display: block;
+}
+
+.zhongjiangList li .prolink .proimg {
+    float: left;
+    width: 25%;
+    border: 1px solid #dedede;
+}
+
+.zhongjiangList li .prolink .JPintro {
+    float: right;
+    width: 71%;
+}
+
+.zhongjiangList li .prolink .JPname {
+    font-size: 1.28rem;
+    color: #000;
+    overflow: hidden;
+}
+
+.zhongjiangList li .prolink .JPname span:nth-of-type(1) {
+    float: left;
+}
+
+.zhongjiangList li .prolink .JPname span:nth-of-type(2) {
+    float: right;
+    color: #04d29d;
+}
+
+.zhongjiangList li .prolink .JPword {
+    font-size: 1.1rem;
+    color: #555555;
+    line-height: 1.7rem;
+    height: 3.3rem;
+    overflow: hidden;
+    margin-top: 0.5rem;
+}
+
+.zhongjiangList li .prolink .JPtime {
+    font-size: 1.1rem;
+    color: #aaaaaa;
+    margin-top: 0.5rem;
+}
+
+.zhongjiangList li .prolink .JPtime span:nth-of-type(2) {
+    margin-right: 0.64rem;
+}
+
+
+

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1,user-scalable=no">
+    <title></title>
+    <link rel="stylesheet" href="css/zhuanpan/bootstrap.min.css"/>
+    <link rel="stylesheet" href="css/zhuanpan/style-cj.css"/>
+</head>
+<body>
+<div class="main">
+    <div class="banner"><img src="images/zhuanpan/cj-banner.jpg"/></div>
+    <div class="contentBox">
+        <div class="main-header">
+            <p class="p1">我的积分：<span class="coud_num">8</span></p>
+        </div>
+        <div class="main-body">
+            <div id="zhuanpan">
+                <!--  大奖盘  -->
+                <img id="img" class="rotary-table" src="images/zhuanpan/cj-img4.png"/>
+                <img id="tip" class="point i_cont" src="images/zhuanpan/cj-img3.png"/>
+            </div>
+        </div>
+        <img class="cj-shadow" src="images/zhuanpan/cj-img2.png" alt=""/>
+    </div>
+</div>
+<!-- 中奖界面 -->
+<div id="apply1" class="modal fade padding1" tabindex="-1" data-replace="true" data-backdrop="static"
+     style="padding-right:0;">
+    <div class="modal-dialog modal-content"
+         style=" width:84%; margin:11rem auto 0; background:none; border:none; box-shadow:none;">
+        <div class="modal-body">
+            <div class="img1">
+                <img id="productImgSrc" src="images/zhuanpan/cj_1jifen.png"/>
+            </div>
+            <div style=" overflow:hidden; padding:0.34rem 7% 2.56rem; margin-top: -1px; background:#f81a2e; border-radius:0 0 15px 15px; -webkit-border-radius:0 0 15px 15px; -moz-border-radius:0 0 15px 15px;">
+                <button type="button" class="but5" data-dismiss="modal" data-toggle="modal">再抽一次</button>
+                <button onClick="javascript:window.location.href='fillInformation.html'" class="but6" type="button">领取奖品
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--加载-->
+<div id="applyLoading" class="modal fade" tabindex="-1" data-replace="true" data-backdrop="static">
+    <div class="modal-dialog modal-content">
+        <div class="modal-body">
+            <div class="loading-container" align="center">
+                <img src="images/zhuanpan/ajax-loader.gif" alt="Loading" class="loading-gif"/>
+            </div>
+            <p align="center">努力加载中，稍等一会儿哦~</p>
+        </div>
+    </div>
+</div>
+
+<script src="js/phone.js"></script>
+<script src="js/jquery-1.11.3.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script type="text/javascript">
+
+    // 转盘样式  ->  a：旋转角度，p：概率（1代表100%），t：需要显示的其它信息（文案or分享）
+    var result_angle = [
+        {a: 0, p: 1, t: '无'},
+        {a: 45, p: 0, t: '无'},
+        {a: 90, p: 0, t: '无'},
+        {a: 135, p: 0, t: '无'},
+        {a: 180, p: 0, t: '无'},
+        {a: 225, p: 0, t: '无'},
+        {a: 270, p: 0, t: '无'},
+        {a: 315, p: 0, t: '无'}
+    ];
+    var result_index; // 的最终要旋转到哪一块，对应result_angle下标
+    var productImgSrcArr = [];  //存放奖品图片的路径
+    //抽奖转盘配置
+    var rotate = {
+        rotate_angle: 0, //起始位置为0
+        flag_click: true, //转盘转动过程中不可再次触发
+        calculate_result: function (type, during_time, nun1, result_index) {//type:0,箭头转动,1,背景转动;during_time:持续时间(s)
+            var self = this;
+            type = type || 0; // 默认为箭头转动
+            during_time = during_time || 1; // 默认为1s
+
+            var rand_num = Math.ceil(Math.random() * 100); // 用来判断的随机数，1-100
+
+            var start_pos = end_pos = 0; // 判断的角度值起始位置和结束位置
+
+            for (var i in result_angle) {
+                start_pos = end_pos + 1; // 区块的起始值
+                end_pos = end_pos + 100 * result_angle[i].p; // 区块的结束值
+
+                if (rand_num >= start_pos && rand_num <= end_pos) { // 如果随机数落在当前区块，那么获取到最终要旋转到哪一块
+                    result_index = i;
+                    break;
+                }
+            }
+            var rand_circle = Math.ceil(Math.random() * 2) + 3; // 附加多转几圈，2-3
+            self.flag_click = false; // 旋转结束前，不允许再次触发
+            if (type == 1) { // 转动盘子
+                self.rotate_angle = self.rotate_angle - rand_circle * 360 - result_angle[result_index].a - self.rotate_angle % 360;
+                $('#img').css({
+                    'transform': 'rotate(' + -self.rotate_angle + 'deg)',
+                    '-ms-transform': 'rotate(' + -self.rotate_angle + 'deg)',
+                    '-webkit-transform': 'rotate(' + -self.rotate_angle + 'deg)',
+                    '-moz-transform': 'rotate(' + -self.rotate_angle + 'deg)',
+                    '-o-transform': 'rotate(' + -self.rotate_angle + 'deg)',
+                    'transition': 'transform cubic-bezier(0.18,1,0.19,1) ' + during_time + 's',
+                    '-moz-transition': '-moz-transform cubic-bezier(0.18,1,0.19,1) ' + during_time + 's',
+                    '-webkit-transition': '-webkit-transform cubic-bezier(0.18,1,0.19,1) ' + during_time + 's',
+                    '-o-transition': '-o-transform cubic-bezier(0.18,1,0.19,1)' + during_time + 's'
+                });
+            } else { // 转动指针
+                self.rotate_angle = self.rotate_angle + rand_circle * 360 + result_angle[result_index].a - self.rotate_angle % 360;
+                $('.i_cont').css({
+                    'transform': 'rotate(' + self.rotate_angle + 'deg)',
+                    '-ms-transform': 'rotate(' + self.rotate_angle + 'deg)',
+                    '-webkit-transform': 'rotate(' + self.rotate_angle + 'deg)',
+                    '-moz-transform': 'rotate(' + self.rotate_angle + 'deg)',
+                    '-o-transform': 'rotate(' + self.rotate_angle + 'deg)',
+                    'transition': 'transform ease-out ' + during_time + 's',
+                    '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                    '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                    '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                });
+            }
+
+            // 旋转结束后，允许再次触发
+            setTimeout(function () {
+                self.flag_click = true;
+
+                // 告诉抽奖结果
+                //设置中奖的图片
+                $('#productImgSrc').attr("src", productImgSrcArr[result_index]);
+                //显示弹窗
+                $('#apply1').modal('show');
+
+                /*nun1--;*/
+//                nun1 = nun1 - 2;
+//                $(".coud_num").html(nun1);
+//                console.log(nun1);
+                if (parseInt(nun1) <= 1) {
+                    $("#tip").attr("src", "images/zhuanpan/cj-img5.png");
+                    return false;
+                }
+            }, during_time * 1000);
+        }
+    };
+
+    // 页面加载完毕
+    $(document).ready(function () {
+        /**
+         * 依赖于jquery，必须放在最前面
+         */
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+        })(jQuery);
+
+        //获取token
+        var oToken = $.getUrlParam('token');
+        console.log(oToken);
+
+        var nun1;
+        //获取积分，并设置到页面
+        getIntegral(oToken);
+        //设置抽奖数据
+
+        getPrizeData(productImgSrcArr);
+//        console.log(result_angle);
+        //点击开始抽奖
+
+        $('#tip').click(function () {
+
+            /* 获取抽奖机会值*/
+            nun1 = $(".coud_num").html();
+
+            //积分过少，禁止抽奖
+            if (parseInt(nun1) <= 1) {
+                $("#tip").attr("src", "images/zhuanpan/cj-img5.png");
+                return false;
+            }
+            // 旋转结束前，不允许再次触发
+            if (rotate.flag_click) {
+                //执行抽奖方法
+                rotate.calculate_result(1, 5, nun1);
+
+                //界面的积分-2
+                nun1 = nun1 - 2;
+                $(".coud_num").html(nun1);
+
+                //给用户列表增加奖品
+                /*  此处应该是一个调用后台接口，给用户增加奖品的函数，把抽到的奖品放到客户的中奖纪录列表里面 */
+                //发送请求，减少积分
+                reduceIntegral("s54615123156", 2);
+            }
+        })
+
+    });
+
+    /**
+     * 扣除用户的积分
+     * @param oToken        用户ID
+     * @param integralNum  减少的积分数
+     */
+    function reduceIntegral(oToken, integralNum) {
+
+    }
+
+    /**
+     * 获取用户的剩余积分
+     * @param oToken
+     */
+    function getIntegral(oToken, callback) {
+        var url = "data/zhuanpan/getJifenData.json";
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+//                console.log(res);
+                $(".coud_num").html(res.jifen);
+                if (callback) callback();
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+
+    /**
+     *  获取抽奖活动的数据
+     */
+    function getPrizeData(productImgSrcArr) {
+        var url = "data/zhuanpan/dataImg.json";
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+//                console.log(res);
+                $("#img").src = res.data.prizePlateImg;
+                $.each(res.data.productList, function (index, ele) {
+                    result_angle[index].p = ele.Probability;
+                    result_angle[index].t = ele.productTitle;
+                    productImgSrcArr[index] = ele.productImgSrc;
+                })
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+</script>
+</body>
+</html>

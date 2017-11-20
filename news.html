@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"/>
+    <title></title>
+    <link rel="stylesheet" type="text/css" href="css/photoView.css" th:href="@{/css/photoView.css}"/>
+    <link rel="stylesheet" type="text/css" href="css/news.css" th:href="@{/css/news.css}"/>
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon.ico" th:href="@{/images/favicon.ico}"/>
+
+</head>
+<body>
+<h2 th:text="${news.title}">微东新闻标题</h2>
+<div class="subtitle">
+    <span class="author" th:text="${news.author}">这里是作者</span>
+    <span class="time" th:text="${#dates.format(news.startDate,'yyyy-MM-dd')}">这里是日期</span>
+</div>
+
+<div class="content photoview" th:utext="${news.detail}">
+    <p>
+        ugurtyetutyurteuetyuetyu
+    </p>
+    <p>
+        <img src="http://news-web.oss-cn-beijing.aliyuncs.com/news-web/15/6/5b05e9687a7e4f4393c4ef0be0892871-smail.png"
+             title="Hydrangeas.jpg" alt="Hydrangeas.jpg"/>
+    </p>
+    <p>
+        ugurtyetutyurteuetyuetyu
+    </p>
+    <p>
+        <img src="http://news-web.oss-cn-beijing.aliyuncs.com/news-web/15/6/5b05e9687a7e4f4393c4ef0be0892871-smail.png"
+             title="Hydrangeas.jpg" alt="Hydrangeas.jpg"/>
+    </p>
+    <p>
+        ugurtyetutyurteuetyuetyu
+    </p>
+    <p>
+        <img src="http://news-web.oss-cn-beijing.aliyuncs.com/news-web/15/6/5b05e9687a7e4f4393c4ef0be0892871-smail.png"
+             title="Hydrangeas.jpg" alt="Hydrangeas.jpg"/>
+    </p>
+    <p>
+        <img src="http://news-web.oss-cn-beijing.aliyuncs.com/news-web/1/5/e86bf0b52a094d2aa8ce66b16b6e11ea-smail.png" title="QQ图片20171028132004.png" alt="QQ图片20171028132004.png"/><img src="http://news-web.oss-cn-beijing.aliyuncs.com/news-web/1/5/e86bf0b52a094d2aa8ce66b16b6e11ea-smail.png" title="QQ图片20171028132004.png" alt="QQ图片20171028132004.png" width="200" height="200"/>
+    </p>
+</div>
+
+<script src="js/zepto.min.js" th:src="@{/js/zepto.min.js}"></script>
+<script src="js/touch.js" th:src="@{/js/touch.js}"></script>
+<script src="js/detect.js" th:src="@{/js/detect.js}"></script>
+<script src="js/photoView.js" th:src="@{/js/photoView.js}"></script>
+<script src="js/news.js" th:src="@{/js/news.js}"></script>
+</body>
+</html>

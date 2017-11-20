@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>推荐有奖</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+</head>
+<body style="background:#94a1f9; padding-bottom: 30px;">
+<div class="tuijianBox">
+    <img class="img1" src="images/Instructions/img1.jpg"/>
+    <div class="redpacket">
+        <img class="img2" src="images/Instructions/img3.png"/>
+        <!--<ul class="list1">-->
+        <!--<li>小薇薇 邀请</li>-->
+        <!--<li>你加入微东到家</li>-->
+        <!--<li><span>40元</span>现金奖励</li>-->
+        <!--</ul>-->
+    </div>
+    <form>
+        <p><input type="tel" id="telephone" placeholder="请输入手机号码"></p>
+        <p>
+            <span class="link1" href="###">领取奖励<img src="images/Instructions/img4.png" alt=""/></span>
+        </p>
+        <p>
+            <a class="link2" href="activityDetail.html">活动说明</a>
+        </p>
+    </form>
+</div>
+
+<script src="js/phone.js"></script>
+<script src="js/zepto.min.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script>
+
+    $(function () {
+
+        //获取token
+        var oToken = $.getUrlParam('token');
+        //获取邀请人的信息
+        invitePerson(oToken);
+
+        //点击领取按钮
+        $('.link1').tap(function () {
+            //获取手机号
+            var phone = $('#telephone').val();
+            console.log("phone:" + phone);
+            //手机号格式填写正确以后
+            if (isRightPhoneNumber(phone)) {
+                var url = "";
+                $.ajax({
+                    url: url,
+                    type: "GET",
+                    data: {
+                        token: oToken,
+                        phone: phone
+                    },
+                    success: function () {
+
+                    },
+                    error: function () {
+
+                    }
+                })
+            }
+            //不填写手机号或者手机号格式错误
+            else {
+                alert("手机号不正确");
+            }
+        });
+
+    });
+
+
+    function invitePerson(oToken) {
+//    <li>小薇薇 邀请</li>
+//        <li>你加入微东到家</li>
+//        <li><span>40元</span>现金奖励</li>
+        var url = "data/Instructions/invitePerson.json";
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                var oul = $("<ul class='list1'></ul>");
+                oul.html(
+                    '<li>' + res.data.invitePersonName + '邀请</li>' +
+                    '<li>你加入微东到家</li>' +
+                    '<li><span>' + res.data.inviteMoney + '元</span>现金奖励</li>'
+                );
+                $('.redpacket').append(oul);
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+
+
+    /**invite
+     * 判断是不是一个手机号，返回0 表示不是， 返回1 表示是
+     * @param val
+     * @returns {number}
+     */
+    function isRightPhoneNumber(val) {
+        var re = /^(13[0-9]{9})|(15[0-9][0-9]{8})|(18[0-9][0-9]{8})|(17[0][0-9]{8})|(14[7][0-9]{8})$/;
+        if (!re.test(val)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    };
+</script>
+</body>
+</html>

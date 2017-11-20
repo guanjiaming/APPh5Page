@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>砸金蛋</title>
+    <meta http-equiv="X-UA-Compatible" content="edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" href="css/zaJinDan/style.css"/>
+    <link rel="stylesheet" href="css/zaJinDan/main_response.css"/>
+</head>
+<body>
+<div class="loadingDiv" id="loadingDiv">
+    <p class="wiatTitle">请稍等...</p>
+</div>
+<div class="goldContent">
+    <div class="headPage">
+        <img class="headPage_Img" src="images/zaJinDan/banner.jpg" alt="砸金蛋" title="砸金蛋"/>
+    </div>
+    <div class="goldEggsDiv">
+        <img class="centerPage_Img" src="images/zaJinDan/conimg.jpg" alt="砸金蛋" title="砸金蛋"/>
+        <div class="myjifen">
+            <span>我的积分<i class="integralNum">88888</i></span>
+        </div>
+        <div class="list_EggsDiv" id="carousel">
+            <div>
+                <ul class="jinDanUl" id="jinDanUl1">
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg1" title="快来砸我呀！"/></li>
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg2" title="快来砸我呀！"/></li>
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg3" title="快来砸我呀！"/></li>
+                </ul>
+            </div>
+            <div>
+                <ul class="jinDanUl1" id="jinDanUl2">
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg4" title="快来砸我呀！"/></li>
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg5" title="快来砸我呀！"/></li>
+                    <li><img src="images/zaJinDan/eggs.png" alt="egg6" title="快来砸我呀！"/></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script data-main="js/zaJinDan/do_main.js" src="js/zaJinDan/jquery-2.1.0.min.js"></script>
+<script src="js/zaJinDan/require.js"></script>
+<script src="js/phone.js"></script>
+<script>
+    $(function () {
+        /**
+         * 依赖于jquery，必须放在最前面
+         */
+        (function ($) {
+            $.getUrlParam = function (name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]); return null;
+            }
+        })(jQuery);
+
+        //获取token
+        var oToken = $.getUrlParam('token');
+        console.log(oToken);
+        getIntegral();
+        /**
+         * 获取用户积分
+         * @param oToken
+         */
+        function getIntegral(oToken) {
+            $.ajax({
+                url: "data/zaJinDan/jifen.json",
+                type: "GET",
+                success: function (res) {
+                    //设置页面上的积分数为后台请求过来的
+                    $(".myjifen .integralNum").text(res.jifen);
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+
+    });
+</script>
+</html>

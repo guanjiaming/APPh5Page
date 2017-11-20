@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>中奖纪录</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+
+</head>
+<body style="background:#f3f7f7;">
+<ul class="zhongjiangList">
+    <!--<li>-->
+        <!--<a class="prolink" href="###">-->
+            <!--<img class="proimg" src="images/proimg1.jpg" alt="商品图片"/>-->
+            <!--<div class="JPintro">-->
+                <!--<div class="JPname">-->
+                    <!--<span>小米手环</span><span>配送中</span>-->
+                <!--</div>-->
+                <!--<div class="JPword">电提醒 久坐提醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</div>-->
+                <!--<div class="JPtime"><span>中奖时间：</span><span>2017.08.22</span><span>11:55</span></div>-->
+            <!--</div>-->
+        <!--</a>-->
+    <!--</li>-->
+</ul>
+<script src="js/phone.js"></script>
+<script src="js/zepto.min.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script>
+    $(function () {
+
+        var oToken = $.getUrlParam('token');
+        getData(oToken);
+
+        /**
+         * 获取用户的中奖纪录列表
+         * @param oToken
+         */
+        function getData(oToken) {
+            var url = "data/Instructions/data.json";
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (res) {
+                    console.log(res);
+                    $.each(res.data.productList, function (index, ele) {
+                        var oli = $('<li></li>');
+                        oli.html(
+                            '<a class="prolink" href="###">' +
+                            '<img class="proimg" src="' + ele.productImg + '" alt="商品图片"/>' +
+                            '<div class="JPintro">' +
+                                '<div class="JPname">' +
+                                '<span>'+ ele.productName +'</span><span>'+ ele.productStatus +'</span>' +
+                                '</div>' +
+                                '<div class="JPword">'+ ele.productDesc +'</div>' +
+                                '<div class="JPtime"><span>中奖时间：</span><span>'+ ele.winningTime +'</span></div>'+
+                            '</div></a>'
+                        );
+                        $('.zhongjiangList').append(oli);
+                    })
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
+    })
+</script>
+</body>
+</html>

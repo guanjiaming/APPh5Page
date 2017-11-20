@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>意见反馈</title>
+    <link rel="stylesheet" type="text/css" href="css/common.css"/>
+
+</head>
+<body style="background:#f3f7f7;">
+<form>
+    <textarea id="content"
+              class="feedback"
+              style="resize: none; overflow: scroll;overflow-x:hidden"
+              placeholder="您好我是微东，您有什么意见或建议尽请提出"
+
+    ></textarea>
+    <button id="feedbackBtn" class="feedbtn" type="button">确定</button>
+</form>
+
+<script src="js/phone.js"></script>
+<script src="js/zepto.min.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script src="js/base64.js"></script>
+<script>
+    //获取token
+    var oToken = $.getUrlParam();
+    //http前缀地址
+    var oHttp = "http://t.bjwddj.com";
+    //1.加密
+    var base = new Base64();
+    // var result = base.encode(str);
+
+    //点击发送按钮
+    $("#feedbackBtn").tap(function () {
+        var content = $("#content").val();
+        //判断输入的长度
+        if (content.length > 255) {
+            alert('意见反馈在255字以内');
+        } else {
+            console.log("content:" + base.encode(content));
+            var url = oHttp + "/feedbackLog/save/";
+            sendContent(url, oToken, content);
+        }
+    });
+
+    /**
+     * 发送 意见反馈方法
+     * @param url
+     * @param token
+     * @param content
+     */
+    function sendContent(url, token, content) {
+        var body = {"token": token, "content": content};
+        var data = base.encode(JSON.stringify(body));
+        //将data拼接到url地址后面
+        url = url + data;
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                res = JSON.parse(res);
+                console.log(res);
+                if (res.code == 1) {
+                    alert(res.msg);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+</script>
+</body>
+</html>

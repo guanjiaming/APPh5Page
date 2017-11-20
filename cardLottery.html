@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <title>翻牌抽奖</title>
+    <link rel="stylesheet" href="css/cardLottery/cardLottery.css">
+</head>
+<body>
+
+<div class="wddj-cardLottery">
+    <!-- 内嵌页面内容 -->
+    <div class="cardLotteryContent">
+        <!-- 标题1 -->
+        <div class="title1"></div>
+        <div class="title2"></div>
+        <p class="myIntegral">我的积分：<span class="integral">999</span></p>
+        <!--  抽奖的卡牌  -->
+        <ul class="cardWrap">
+            <li class="card card1"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card2"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card3"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card4"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card5"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card6"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
+                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+        </ul>
+    </div>
+
+
+    <!-- 底部开始按钮 -->
+    <div class="startBtn"></div>
+</div>
+
+<!-- dialog -->
+<div class="dialog">
+    <!-- 光环背景 -->
+    <div class="aura"></div>
+
+    <!-- 主要区域内容 -->
+    <div class="dialog-content">
+        <h2 class="title">恭喜您中奖啦</h2>
+        <img class="prizeImg" src="images/cardLottery/zimg2.png" alt="奖品图">
+        <br>
+        <img class="showdown" src="images/cardLottery/showdown.png">
+        <div class="btn">
+            <img class="determineBtn" src="images/cardLottery/determineBtn.png">
+            <img class="againBtn" src="images/cardLottery/againBtn.png">
+        </div>
+    </div>
+
+</div>
+<script src="js/zepto.min.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/cardLottery/cardLottery.js"></script>
+</body>
+</html>
