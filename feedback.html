@@ -6,7 +6,6 @@
     <meta name="format-detection" content="telephone=no"/>
     <title>意见反馈</title>
     <link rel="stylesheet" type="text/css" href="css/common.css"/>
-
 </head>
 <body style="background:#f3f7f7;">
 <form>
@@ -24,11 +23,12 @@
 <script src="js/touch.js"></script>
 <script src="js/getUrlParam.js"></script>
 <script src="js/base64.js"></script>
+<script src="js/getWddjUrl.js"></script>
 <script>
     //获取token
-    var oToken = $.getUrlParam();
+    var oToken = $.getUrlParam('token');
     //http前缀地址
-    var oHttp = "http://t.bjwddj.com";
+    var oHttp = getWddjUrl();
     //1.加密
     var base = new Base64();
     // var result = base.encode(str);
@@ -40,7 +40,6 @@
         if (content.length > 255) {
             alert('意见反馈在255字以内');
         } else {
-            console.log("content:" + base.encode(content));
             var url = oHttp + "/feedbackLog/save/";
             sendContent(url, oToken, content);
         }
@@ -54,22 +53,22 @@
      */
     function sendContent(url, token, content) {
         var body = {"token": token, "content": content};
-        var data = base.encode(JSON.stringify(body));
+        var baseData = base.encode(JSON.stringify(body));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/","gm"),"*");
         //将data拼接到url地址后面
-        url = url + data;
+        url = url + baseData;
         $.ajax({
             url: url,
             type: "POST",
             contentType: "application/json; charset=utf-8",
             success: function (res) {
                 res = JSON.parse(res);
-                console.log(res);
-                if (res.code == 1) {
-                    alert(res.msg);
-                }
+                alert(res.msg);
             },
             error: function (err) {
                 console.log(err);
+                alert("网络错误，请重新加载");
             }
         })
     }

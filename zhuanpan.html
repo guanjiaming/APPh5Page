@@ -19,7 +19,17 @@
         <div class="main-body">
             <div id="zhuanpan">
                 <!--  大奖盘  -->
-                <img id="img" class="rotary-table" src="images/zhuanpan/cj-img4.png"/>
+                <!--<img id="img" class="rotary-table" src="images/zhuanpan/cj-img4.png"/>-->
+                <div id="img" class="rotary-table">
+                    <img class="img img1" src="images/zhuanpan/01-1Integral.png">
+                    <img class="img img2" src="images/zhuanpan/02-3Integral.png">
+                    <img class="img img3" src="images/zhuanpan/03-30M.png">
+                    <img class="img img4" src="images/zhuanpan/04-ziPaiGan.png">
+                    <img class="img img5" src="images/zhuanpan/05-5Yuan.png">
+                    <img class="img img6" src="images/zhuanpan/06-2YuanYouHui.png">
+                    <img class="img img7" src="images/zhuanpan/07-HuaWei.png">
+                    <img class="img img8" src="images/zhuanpan/08-YuYou.png">
+                </div>
                 <img id="tip" class="point i_cont" src="images/zhuanpan/cj-img3.png"/>
             </div>
         </div>
@@ -33,12 +43,14 @@
          style=" width:84%; margin:11rem auto 0; background:none; border:none; box-shadow:none;">
         <div class="modal-body">
             <div class="img1">
-                <img id="productImgSrc" src="images/zhuanpan/cj_1jifen.png"/>
+                <div id="productImgSrc" class="prizeBg">
+                    <p class="prizeName">恭喜您抽到   <span class="yelloColor">45645656</span></p>
+                    <img class="prizeImg" src="images/zhuanpan/zpt1_03.png">
+                </div>
             </div>
             <div style=" overflow:hidden; padding:0.34rem 7% 2.56rem; margin-top: -1px; background:#f81a2e; border-radius:0 0 15px 15px; -webkit-border-radius:0 0 15px 15px; -moz-border-radius:0 0 15px 15px;">
                 <button type="button" class="but5" data-dismiss="modal" data-toggle="modal">再抽一次</button>
-                <button onClick="javascript:window.location.href='fillInformation.html'" class="but6" type="button">领取奖品
-                </button>
+                <button id="goPrizeList" class="but6" type="button">领取奖品</button>
             </div>
         </div>
     </div>
@@ -59,20 +71,21 @@
 <script src="js/phone.js"></script>
 <script src="js/jquery-1.11.3.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/getWddjUrl.js"></script>
 <script type="text/javascript">
-
     // 转盘样式  ->  a：旋转角度，p：概率（1代表100%），t：需要显示的其它信息（文案or分享）
     var result_angle = [
         {a: 0, p: 1, t: '无'},
-        {a: 45, p: 0, t: '无'},
-        {a: 90, p: 0, t: '无'},
-        {a: 135, p: 0, t: '无'},
-        {a: 180, p: 0, t: '无'},
-        {a: 225, p: 0, t: '无'},
-        {a: 270, p: 0, t: '无'},
-        {a: 315, p: 0, t: '无'}
+        {a: -45, p: 0, t: '无'},
+        {a: -90, p: 0, t: '无'},
+        {a: -135, p: 0, t: '无'},
+        {a: -180, p: 0, t: '无'},
+        {a: -225, p: 0, t: '无'},
+        {a: -270, p: 0, t: '无'},
+        {a: -315, p: 0, t: '无'}
     ];
-    var result_index; // 的最终要旋转到哪一块，对应result_angle下标
+    var result_index; // 的最终要旋转到哪一 块，对应result_angle下标
     var productImgSrcArr = [];  //存放奖品图片的路径
     //抽奖转盘配置
     var rotate = {
@@ -82,9 +95,7 @@
             var self = this;
             type = type || 0; // 默认为箭头转动
             during_time = during_time || 1; // 默认为1s
-
             var rand_num = Math.ceil(Math.random() * 100); // 用来判断的随机数，1-100
-
             var start_pos = end_pos = 0; // 判断的角度值起始位置和结束位置
 
             for (var i in result_angle) {
@@ -96,7 +107,7 @@
                     break;
                 }
             }
-            var rand_circle = Math.ceil(Math.random() * 2) + 3; // 附加多转几圈，2-3
+            var rand_circle = Math.ceil(Math.random() * 2) + 2; // 附加多转几圈，2-3
             self.flag_click = false; // 旋转结束前，不允许再次触发
             if (type == 1) { // 转动盘子
                 self.rotate_angle = self.rotate_angle - rand_circle * 360 - result_angle[result_index].a - self.rotate_angle % 360;
@@ -129,17 +140,16 @@
             // 旋转结束后，允许再次触发
             setTimeout(function () {
                 self.flag_click = true;
-
                 // 告诉抽奖结果
                 //设置中奖的图片
-                $('#productImgSrc').attr("src", productImgSrcArr[result_index]);
+//                $('#productImgSrc').attr("src", productImgSrcArr[result_index]);
                 //显示弹窗
                 $('#apply1').modal('show');
-
                 /*nun1--;*/
 //                nun1 = nun1 - 2;
 //                $(".coud_num").html(nun1);
 //                console.log(nun1);
+                //积分不足，则不能进行抽奖
                 if (parseInt(nun1) <= 1) {
                     $("#tip").attr("src", "images/zhuanpan/cj-img5.png");
                     return false;
@@ -157,28 +167,32 @@
             $.getUrlParam = function (name) {
                 var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
                 var r = window.location.search.substr(1).match(reg);
-                if (r != null) return unescape(r[2]); return null;
+                if (r != null) return unescape(r[2]);
+                return null;
             }
         })(jQuery);
 
         //获取token
         var oToken = $.getUrlParam('token');
-        console.log(oToken);
+//        var oToken = "B1162BDE2D1A6A3AB97C6A3437A94F7F";
+        var oHttp = getWddjUrl();
+//        console.log(oToken);
+        var base = new Base64();
 
         var nun1;
-        //获取积分，并设置到页面
-        getIntegral(oToken);
+
+        //获取用户积分，并设置到页面
+        getIntegral(oHttp, oToken, base);
+
         //设置抽奖数据
-
-        getPrizeData(productImgSrcArr);
+        getProduct(oHttp, 1, oToken, base);  //抽奖等级,1: 幸运转盘,2: 魔术扑克,3: 一锤定音,是否必须: 是
 //        console.log(result_angle);
-        //点击开始抽奖
 
+        //点击开始抽奖
         $('#tip').click(function () {
 
             /* 获取抽奖机会值*/
             nun1 = $(".coud_num").html();
-
             //积分过少，禁止抽奖
             if (parseInt(nun1) <= 1) {
                 $("#tip").attr("src", "images/zhuanpan/cj-img5.png");
@@ -186,70 +200,161 @@
             }
             // 旋转结束前，不允许再次触发
             if (rotate.flag_click) {
-                //执行抽奖方法
-                rotate.calculate_result(1, 5, nun1);
-
+                //现行转动一圈
+                $("#img").css({
+                    'transform': 'rotate(180deg)',
+                    '-webkit-transform': 'rotate(180deg)',
+                    'transition': '-webkit-transform 1s',
+                    '-webkit-transition': '-webkit-transform 1s'
+                });
                 //界面的积分-2
                 nun1 = nun1 - 2;
                 $(".coud_num").html(nun1);
+                //进行抽奖
+                getPrize(oHttp, 1, oToken, base,function () {
+                    //显示剩余积分
+                    setTimeout(function () {
+                        //获取用户积分，并设置到页面
+                        getIntegral(oHttp, oToken, base);
+                    },1000)
+                });
 
-                //给用户列表增加奖品
-                /*  此处应该是一个调用后台接口，给用户增加奖品的函数，把抽到的奖品放到客户的中奖纪录列表里面 */
-                //发送请求，减少积分
-                reduceIntegral("s54615123156", 2);
             }
-        })
+        });
+
+        //点击领奖
+        $("#goPrizeList").click(function () {
+            window.location.href = oHttp + "/explain/winningLog.html?token=" + oToken;
+        });
 
     });
 
     /**
-     * 扣除用户的积分
-     * @param oToken        用户ID
-     * @param integralNum  减少的积分数
-     */
-    function reduceIntegral(oToken, integralNum) {
-
-    }
-
-    /**
-     * 获取用户的剩余积分
+     * 获取用户剩余积分
+     * @param oHttp
      * @param oToken
+     * @param base
+     * @param callback
      */
-    function getIntegral(oToken, callback) {
-        var url = "data/zhuanpan/getJifenData.json";
+    function getIntegral(oHttp, oToken, base, callback) {
+        var data = {"token": oToken};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        //拼接参数
+        var url = "/luckGame/getIntegral/";
+        url = oHttp + url + baseData;
+//        console.log(url);
         $.ajax({
             url: url,
-            type: "GET",
+            type: "POST",
             success: function (res) {
+                res = JSON.parse(res);
 //                console.log(res);
-                $(".coud_num").html(res.jifen);
+                if (res.code == 1) {
+                    $(".coud_num").html(res.resData.integral);//设置 我的积分num
+                }
                 if (callback) callback();
             },
             error: function (err) {
-                console.log(err);
+//                console.log(err);
             }
         })
     }
 
     /**
-     *  获取抽奖活动的数据
+     * 进行抽奖
+     * @param oHttp
+     * @param level
+     * @param token
+     * @param base
+     * @param callback
      */
-    function getPrizeData(productImgSrcArr) {
-        var url = "data/zhuanpan/dataImg.json";
+
+    function getPrize(oHttp, level, token, base, callback) {
+        var data = {"level": level, "token": token};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        var url = '/luckGame/doIt/';
+        url = oHttp + url + baseData;
+//        console.log(url);
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (res) {
+                res = JSON.parse(res);
+                console.log(res);
+                if (res.code == 1) {
+                    //设置中奖的图片
+//                    $('#productImgSrc').attr("src", res.resData.imgUrlView);
+                    $('#productImgSrc .prizeImg').attr("src", res.resData.imgUrlView);
+                    $('#productImgSrc .yelloColor').text(res.resData.name);
+                    //遍历，设置中奖奖品的概率提升为1
+                    $.each(result_angle, function (index, ele) {
+                        result_angle[index].p = 0;
+                        if (result_angle[index].t == res.resData.id) {
+                            result_angle[index].p = 1;
+                        }
+                    });
+                    //转动转盘
+                    rotate.calculate_result(1, 5, res.resData.integral);
+
+                    if (callback) callback();
+
+                } else {
+                    alert(res.msg);
+
+                }
+
+            },
+            error: function (err) {
+                console.log(err);
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+
+    /**
+     * 请求奖品列表数据
+     * @param oHttp
+     * @param level
+     * @param token
+     * @param base
+     */
+    function getProduct(oHttp, level, token, base) {
+        var data = {"level": level, "token": token};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        //拼接参数
+        var url = "/luckGame/data/";
+        url = oHttp + url + baseData;
+
         $.ajax({
             url: url,
             type: "GET",
             success: function (res) {
-//                console.log(res);
-                $("#img").src = res.data.prizePlateImg;
-                $.each(res.data.productList, function (index, ele) {
-                    result_angle[index].p = ele.Probability;
-                    result_angle[index].t = ele.productTitle;
-                    productImgSrcArr[index] = ele.productImgSrc;
-                })
+//                console.log(JSON.parse(res)); //code: 1, msg: "请求成功"
+                res = JSON.parse(res);
+                //渲染奖品列表
+                if (res.code == 1) {
+//                    <img class="img img1" src="images/zhuanpan/01-1Integral.png">
+//                    $("#img").src = res.data.prizePlateImg;
+                    $("#img").html('');
+                    $.each(res.resData, function (index, ele) {
+                        //将返回的奖品设置到页面上
+                        var oimg = $('<img class="img img' + (index + 1) + '" src="' + ele.imgUrlView + '">');
+                        $("#img").append(oimg);
+                        //
+                        result_angle[index].t = ele.prizeId;
+                    });
+                    //剩余积分数
+                    $(".coud_num").html(res.resData.integral);//设置 我的积分num
+                }
             },
             error: function (err) {
-                console.log(err);
+                console.log(JSON.parse(err));
             }
         })
     }

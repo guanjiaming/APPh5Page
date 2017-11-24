@@ -4,7 +4,6 @@
  * 示例： var oToken = $.getUrlParam('token');  alert(oToken)；
  *
  */
-
 (function ($) {
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

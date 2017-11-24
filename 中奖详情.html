@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>奖品详情</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .clearfix:after {
+            content: "";
+            display: block;
+            clear: both;
+            height: 0;
+            overflow: hidden;
+            font-size: 0;
+        }
+
+        html, body {
+            margin: 0 auto;
+            max-width: 500px;
+            min-width: 320px;
+            background: #f3f7f7;
+        }
+
+        /* 顶部大图 */
+        .content {
+            padding-bottom: 20px;
+        }
+
+        .content .productImg {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+
+        .productImg img {
+            width: 100%;
+        }
+
+        /*  商品描述  */
+        .productDetail {
+            padding: 0 17px;
+        }
+
+        .productDetail {
+            background: #fff;
+            padding-top: 20px;
+            padding-bottom: 15px;
+        }
+
+        .productDetail .productName {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .productName h1 {
+            font-size: 18px;
+            color: #000;
+            float: left;
+        }
+
+        .productName span {
+            color: #04d29d;
+            font-size: 13px;
+            float: right;
+        }
+
+        .productDesc {
+            font-size: 13px;
+            line-height: 20px;
+            margin-bottom: 16px;
+            color: #555;
+        }
+
+        .productPrice {
+            color: #ee302f;
+            font-size: 18px;
+        }
+
+        /*  其他信息  */
+        .otherInfo {
+
+        }
+
+        .otherInfoTitle {
+            padding: 0 17px;
+            font-size: 14px;
+            line-height: 33px;
+        }
+
+        .otherInfoDesc {
+            background: #fff;
+            line-height: 30px;
+            font-size: 13px;
+            color: #555;
+            padding: 5px 17px;
+        }
+
+        .gotoGetPrizeBtn {
+            background: #04d29d;
+            color: #fff;
+            width: 80%;
+            height: 44px;
+            border-radius: 22px;
+            font-size: 16px;
+            line-height: 44px;
+            text-align: center;
+            /*position: absolute;*/
+            /*bottom:30px;*/
+            margin-left: 50%;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            transform: translateX(-50%);
+        }
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+<div class="content">
+    <!--  顶部商品图片  -->
+    <!--<div class="productImg">-->
+    <!--<img src="images/Instructions/produImg.jpg" alt="">-->
+    <!--</div>-->
+
+    <!-- 商品信息 -->
+    <!--<div class="productDetail">-->
+    <!--<div class="productName clearfix">-->
+    <!--<h1>小米手环</h1>-->
+    <!--<span>配送中</span>-->
+    <!--</div>-->
+    <!--<div class="productDesc">-->
+    <!--<p>小米（MI）小米手环2 智能运动 心率监测 来电提醒 久坐提 醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</p>-->
+    <!--</div>-->
+    <!--<div class="productPrice">-->
+    <!--<p>¥ 149.00</p>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--  其他信息  -->
+    <!--<div class="otherInfo">-->
+    <!--<p class="otherInfoTitle">收件人信息</p>-->
+    <!--<div class="otherInfoDesc">-->
+    <!--<p>姓名：吴邪 </p>-->
+    <!--<p>手机号：15941234567</p>-->
+    <!--<p>收件地址：北京市东城区广渠家园24号楼3单元210</p>-->
+    <!--</div>-->
+    <!--<p class="otherInfoTitle">配送信息</p>-->
+    <!--<div class="otherInfoDesc">-->
+    <!--<p>配送方：圆通快递</p>-->
+    <!--<p>快递单号：159410488393234567</p>-->
+    <!--</div>-->
+    <!--</div>-->
+
+    <!--  领奖按钮  -->
+    <!--<div class="gotoGetPrizeBtn">-->
+    <!--<a href="###">立即领取</a>-->
+    <!--</div>-->
+</div>
+
+<script src="js/zepto.js"></script>
+<script src="js/touch.js"></script>
+<script src="js/base64.js"></script>
+<script src="js/getWddjUrl.js"></script>
+<script src="js/getUrlParam.js"></script>
+<script>
+    $(function () {
+//        oHref = "中奖详情.html?token=" + oToken + "&prizeid=" + ele.id;
+            var oToken = $.getUrlParam('token');
+//        var oToken = "1AFB60EB41637518CA55804331975EA1";
+        var prizeid = $.getUrlParam('prizeid');
+//        var prizeid = "153";
+
+        var oHttp = getWddjUrl();
+        var base = new Base64();
+
+        getPrizeDetailData(oToken, oHttp, base, prizeid);
+    });
+
+
+    /**
+     * 获取奖品详情数据
+     * */
+    function getPrizeDetailData(oToken, oHttp, base, prizeid) {
+        var url = "/luckGame/detail/";
+        var data = {"token": oToken, "id": prizeid};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        url = oHttp + url + baseData;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                res = JSON.parse(res);
+                console.log(res);
+                //code = 1 表示请求成功
+                if (res.code == 1) {
+
+                    //如果是实物
+                    if (res.resData.type == 3) {
+                        createDOM3(res.resData);
+                    }
+                    //是充值卡，并且已经发放
+                    else if (res.resData.type == 4 && res.resData.status == 1) {
+                        createDOM4(res.resData);
+                    }
+                }
+                else {
+                    alert(res.msg);
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+
+    /**
+     * 创建实物的 DOM
+     * @param obj
+     */
+    function createDOM3(obj) {
+        //奖品状态
+        var preziStatus;
+        if (obj.status == 0) {
+            preziStatus = "奖品正在陆续发放中,请稍后查看"
+        } else if (obj.status == 1) {
+            preziStatus = "已发放"
+        }
+
+        //顶部图片
+        var productImg = $('<div class="productImg"><img src="' + obj.imgUrlView + '" alt="奖品大图"></div>');
+
+        //商品详情
+        var productDetail = $('<div class="productDetail"></div>');
+        productDetail.html(
+            '<div class="productName clearfix">' +
+            '<h1>' + obj.name + '</h1>' +
+            '<span>' + preziStatus + '</span>' +
+            '</div>' +
+            '<div class="productDesc">' +
+            '<p>' + obj.description + '</p>' +
+            '</div>' +
+            '<div class="productPrice"><p>' + obj.price + '</p></div></div>'
+        );
+        //其他信息
+        var otherInfo = $('<div class="otherInfo"></div>');
+        otherInfo.html(
+            '<p class="otherInfoTitle">收件人信息</p>' +
+            '<div class="otherInfoDesc">' +
+            '<p>姓名：' + obj.recipientsName + '</p>' +
+            '<p>手机号：' + obj.recipientsPhone + '</p>' +
+            '<p>收件地址：' + obj.province + obj.city + obj.region + obj.detail + '</p>' +
+            '</div>' +
+            '<p class="otherInfoTitle">配送信息</p>' +
+            '<div class="otherInfoDesc">' +
+            '<p>配送方：' + obj.expressName + '</p>' +
+            '<p>快递单号：' + obj.expressNumber + '</p>' +
+            '</div>' +
+            '</div>'
+        );
+        $('.content').append(productImg);
+        $('.content').append(productDetail);
+        $('.content').append(otherInfo)
+    }
+
+    /**
+     * 创建充值卡的DOM
+     * @param obj
+     */
+    function createDOM4(obj) {
+        //顶部图片
+        var productImg = $('<div class="productImg"><img src="' + obj.imgUrlView + '" alt="奖品大图"></div>');
+
+        //商品详情
+        var productDetail = $('<div class="productDetail"></div>');
+        productDetail.html(
+            '<div class="productName clearfix">' +
+            '<h1>' + obj.name + '</h1>' +
+            '<span>已发放</span>' +
+            '</div>' +
+            '<div class="productDesc">' +
+            '<p>' + obj.description + '</p>' +
+            '</div>' +
+            '<div class="productPrice"><p>' + obj.price + '</p></div></div>'
+        );
+        //其他信息
+        var otherInfo = $('<div class="otherInfo"><p class="otherInfoTitle">' + obj.content + '</p></div>');
+        $('.content').append(productImg);
+        $('.content').append(productDetail);
+        $('.content').append(otherInfo)
+    }
+
+</script>
+</body>
+</html>

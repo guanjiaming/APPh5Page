@@ -1,11 +1,11 @@
 {
   "frontList": [
-    {"src":"images/cardLottery/zimg1.png"},
-    {"src":"images/cardLottery/zimg2.png"},
-    {"src":"images/cardLottery/zimg1.png"},
-    {"src":"images/cardLottery/zimg2.png"},
-    {"src":"images/cardLottery/zimg1.png"},
-    {"src":"images/cardLottery/zimg1.png"}
+    {"src":"images/cardLottery/pk1.png"},
+    {"src":"images/cardLottery/pk2.png"},
+    {"src":"images/cardLottery/pk3.png"},
+    {"src":"images/cardLottery/pk4.png"},
+    {"src":"images/cardLottery/pk5.png"},
+    {"src":"images/cardLottery/pk6.png"}
   ],
   "status": 200
 }

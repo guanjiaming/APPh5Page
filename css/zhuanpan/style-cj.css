@@ -154,9 +154,48 @@ a.footer-a2 {
 }
 
 .rotary-table {
-    width: 412px;
-    height: 413px;
+    width: 326px;
+    height: 326px;
+    position: absolute;
+    left:50%;
+    margin-left: -163px;
+    /*background: #000;*/
+    background: url(../../images/zhuanpan/cj-img4.png);
+    -webkit-background-size: cover;
+    background-size: cover;
 }
+.img{
+    width:110px;
+    height:163px;
+    position: absolute;
+    left:50%;
+    margin-left: -55px;
+    /*设置旋转圆心*/
+    transform-origin:bottom center;
+
+}
+.img2{
+    transform: rotateZ(45deg);
+}
+.img3{
+    transform: rotateZ(90deg);
+}
+.img4{
+    transform: rotateZ(135deg);
+}
+.img5{
+    transform: rotateZ(180deg);
+}
+.img6{
+    transform: rotateZ(225deg);
+}
+.img7{
+    transform: rotateZ(270deg);
+}
+.img8{
+    transform: rotateZ(315deg);
+}
+
 
 .point {
     position: absolute;
@@ -243,13 +282,40 @@ a.loadMore:hover {
     padding: 0px;
     position: relative
 }
-
+.padding1 .modal-body .img1 .prizeBg{
+    width: 100%;
+    height: 240px;
+    background: url("../../images/zhuanpan/cj_1jifen.png") no-repeat;
+    -webkit-background-size: 100% 100%;
+    background-size: 100% 100%;
+    text-align: center;
+    position: relative;
+}
+/*奖品图片*/
+.padding1 .modal-body .img1 .prizeImg{
+    width:192px;
+    height:104px;
+    position: absolute;
+    top: 120px;
+    left: 50%;
+    margin-left: -96px;
+}
+.padding1 .modal-body .img1 .prizeName{
+    text-align: center;
+    position: absolute;
+    top: 82px;
+    left: 50%;
+    transform: translateX(-50%);
+    color:#fff;
+}
+.padding1 .modal-body .img1 .yelloColor{
+    color:#fac10b;
+}
 .padding1 .modal-body .img1 img {
     width: 100%;
     border-radius: 4px 4px 0px 0px;
     -webkit-border-radius: 4px 4px 0px 0px;
 }
-
 .padding1 .modal-body p {
     width: 80%;
     margin: 0px auto;
@@ -529,15 +595,15 @@ a.bt1 {
     }
 
     .rotary-table {
-        width: 350px;
-        height: 351px;
+        width: 326px;
+        height: 326px;
     }
 
     .point {
         width: 100px;
-        height: 119.51px;
+        height: 120px;
         margin-left: -50px;
-        margin-top: -64.5px;
+        margin-top: -82px;
     }
 }
 
@@ -595,14 +661,15 @@ a.bt1 {
 
     /*抽奖*/
     #zhuanpan {
-        width: 310px;
-        height: 311px;
+        width: 326px;
+        height: 326px;
         z-index: 2;
     }
 
     .rotary-table {
-        width: 310px;
-        height: 311px;
+        width: 326px;
+        height: 326px;
+        /*background: #000;*/
     }
 
     .point {
@@ -634,9 +701,14 @@ a.bt1 {
 
     .rotary-table {
         width: 260px;
-        height: 261px;
+        height: 260px;
+        margin-left: -130px;
     }
-
+    .img{
+        width: 88px;
+        height:130px;
+        margin-left: -44px;
+    }
     .point {
         width: 80px;
         height: 95.6px;

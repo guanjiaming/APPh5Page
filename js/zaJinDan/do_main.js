@@ -5,15 +5,22 @@ require.config({
         "require": "require",
         "resize": "resize",
         "carousel": "jinDanCarousel",
-        "oalert": 'alert'
+        "oalert": 'alert',
+        "base": "../base64",
+        "getWddjUrl":"../getWddjUrl"
     }
 });
 
-requirejs(['jquery', 'require', 'carousel', 'oalert'],
+requirejs(['jquery', 'require', 'carousel', 'oalert','base','getWddjUrl'],
     function ($, require, carousel, oalert) {
         $(document).ready(function () {
             //加载完成之后关闭loading
             $('.loadingDiv').hide();
+
+            // //获取token
+            // // var oToken = $.getUrlParam('token');
+            // var oHttp =getWddjUrl();
+            // var base = new Base64();
 
 
             var t;
@@ -27,10 +34,10 @@ requirejs(['jquery', 'require', 'carousel', 'oalert'],
 
                 //清除定时器
                 clearInterval(t);
-                //扣除用户积分  （调用接口方法）
 
-                //页面的积分数减少
+                //获取积分
                 var jifen = $(".myjifen .integralNum").text();
+                // console.log(jifen);
                 if (jifen < 10) {
                     alert("积分不够了，快去做任务吧~");
                 } else {
@@ -59,7 +66,40 @@ requirejs(['jquery', 'require', 'carousel', 'oalert'],
             $('body').on('touchmove', '.loadingDiv', function (event) {
                 event.preventDefault();
             }, false);
+
         });
+
+        /**
+         * 获取用户剩余积分
+         * @param oHttp
+         * @param oToken
+         * @param base
+         * @param callback
+         */
+        function getIntegral(oHttp, oToken, base, callback) {
+            var data = {"token": oToken};
+            var baseData = base.encode(JSON.stringify(data));
+            //去掉特殊的斜杠，已保证url地址的正确性
+            baseData = baseData.replace(new RegExp("/", "gm"), "*");
+            //拼接参数
+            var url = "/luckGame/getIntegral/";
+            url = oHttp + url + baseData;
+            console.log(url);
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (res) {
+                    res = JSON.parse(res);
+                    if (res.code == 1) {
+                        $('.integral').text(res.resData.integral);  //设置 我的积分num
+                    }
+                    if (callback) callback();
+                },
+                error: function (err) {
+                    console.log(err);
+                }
+            })
+        }
     });
 
 requirejs(['jquery', 'resize'],

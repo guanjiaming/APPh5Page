@@ -123,27 +123,11 @@
 <script src="js/base64.js"></script>
 <script src="js/animate.js"></script>
 <script src="js/fade.js"></script>
-<script src="js/OnlineTest/test.js"></script>
-<!--  判断手机类型js  -->
+<script src="js/getWddjUrl.js"></script>
 <script>
-    var browser = {
-        versions: function () {
-            var u = navigator.userAgent, app = navigator.appVersion;
-            return {         //移动终端浏览器版本信息
-                trident: u.indexOf('Trident') > -1, //IE内核
-                presto: u.indexOf('Presto') > -1, //opera内核
-                webKit: u.indexOf('AppleWebKit') > -1, //苹果、谷歌内核
-                gecko: u.indexOf('Gecko') > -1 && u.indexOf('KHTML') == -1, //火狐内核
-                mobile: !!u.match(/AppleWebKit.*Mobile.*/), //是否为移动终端
-                ios: !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/), //ios终端
-                android: u.indexOf('Android') > -1 || u.indexOf('Linux') > -1, //android终端或uc浏览器
-                iPhone: u.indexOf('iPhone') > -1, //是否为iPhone或者QQHD浏览器
-                iPad: u.indexOf('iPad') > -1, //是否iPad
-                webApp: u.indexOf('Safari') == -1 //是否web应该程序，没有头部与底部
-            };
-        }(),
-        language: (navigator.browserLanguage || navigator.language).toLowerCase()
-    }
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 </script>
 <!--  考试js  -->
 <script type="text/javascript">
@@ -152,7 +136,7 @@
         //获取token
         var oToken = $.getUrlParam('token');
         //获取http前缀地址
-        var oHttp = "http://t.bjwddj.com";
+        var oHttp = getWddjUrl();
         //1.加密
         var base = new Base64();
 
@@ -169,17 +153,16 @@
             var url = oHttp + "/identityReview/examPass/";
             //给后台发送数据 -> 已经完成考试
             sendExamResult(url, oToken);
-            exitExam(1);
         });
-        
+
         //继续按钮
         $("#goOnBtn").tap(function () {
-            $(".windowBox1").hide();
+            window.location.reload();
         });
         //退出按钮
         $('#exitBtn').tap(function () {
             //跳回到原生界面 -> 认证考核
-            exitExam();
+            exitExam(0);
         });
 
         //单选多选按钮
@@ -203,6 +186,8 @@
         function sendExamResult(url, token) {
             var data = {"token": token};
             var baseData = base.encode(JSON.stringify(data));
+            //去掉特殊的斜杠，已保证url地址的正确性
+            baseData = baseData.replace(new RegExp("/","gm"),"*");
             //将data拼接到url地址后面
             url = url + baseData;
             $.ajax({
@@ -211,18 +196,29 @@
                 contentType: "application/json; charset=utf-8",
                 success: function (res) {
                     res = JSON.parse(res);
-                    console.log(res);
+//                    console.log(res);
+                    if(res.code == 1){
+                        exitExam(1);
+                    }else{
+                        exitExam(0);
+                        alert(res.msg);
+                    }
                 },
                 error: function (err) {
                     console.log(err);
+                    alert("网络错误，请重新加载");
                 }
             })
         }
 
         //原生监听我这边的方法
-        function exitExam(exitPar) {
-            var abc = exitPar;
-            console.log('');
+        function exitExam(args) {
+            if (isAndroid) {
+                window.jsObj.postMessage(args);
+            }
+            if (isiOS) {
+                window.webkit.messageHandlers.exitExam.postMessage({body: args});
+            }
         }
     })
 </script>

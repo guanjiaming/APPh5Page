@@ -12,11 +12,12 @@
     <img class="img1" src="images/Instructions/img1.jpg"/>
     <div class="redpacket">
         <img class="img2" src="images/Instructions/img3.png"/>
-        <!--<ul class="list1">-->
-        <!--<li>小薇薇 邀请</li>-->
-        <!--<li>你加入微东到家</li>-->
-        <!--<li><span>40元</span>现金奖励</li>-->
-        <!--</ul>-->
+        <ul class="list1">
+            <li>小薇薇 邀请</li>
+            <li>你加入微东到家</li>
+            <li>送您<span>10</span>积分</li>
+            <li>积分可以抽奖哦</li>
+        </ul>
     </div>
     <form>
         <p><input type="tel" id="telephone" placeholder="请输入手机号码"></p>
@@ -33,15 +34,19 @@
 <script src="js/zepto.min.js"></script>
 <script src="js/touch.js"></script>
 <script src="js/getUrlParam.js"></script>
+<script src="js/getWddjUrl.js"></script>
+<script src="js/base64.js"></script>
 <script>
 
     $(function () {
 
         //获取token
-        var oToken = $.getUrlParam('token');
-        //获取邀请人的信息
-        invitePerson(oToken);
-
+//        var userId = $.getUrlParam('userId');
+        var userId = 199;
+        var oHttp = getWddjUrl();
+        var base = new Base64();
+        //获取昵称
+        getUserName(base, oHttp, userId);
         //点击领取按钮
         $('.link1').tap(function () {
             //获取手机号
@@ -49,21 +54,9 @@
             console.log("phone:" + phone);
             //手机号格式填写正确以后
             if (isRightPhoneNumber(phone)) {
-                var url = "";
-                $.ajax({
-                    url: url,
-                    type: "GET",
-                    data: {
-                        token: oToken,
-                        phone: phone
-                    },
-                    success: function () {
-
-                    },
-                    error: function () {
-
-                    }
-                })
+                getAward(base, oHttp, userId, phone, function () {
+                    window.location.href = oHttp + "/explain/recommendAfter.html";
+                });
             }
             //不填写手机号或者手机号格式错误
             else {
@@ -111,6 +104,68 @@
             return 1;
         }
     };
+
+    /**
+     * 获取用户昵称
+     * @param base
+     * @param oHttp
+     * @param userId
+     */
+    function getUserName(base, oHttp, userId) {
+        var data = {"userId": userId};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+
+        var url = "/user/getNickname/";
+        url = oHttp + url + baseData;
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                res = JSON.parse(res);
+                console.log(res);
+                if (res.code == 1) {
+
+                }
+            },
+            error: function (err) {
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+
+    /**
+     * 领取奖励
+     * @param base
+     * @param oHttp
+     * @param userId
+     * @param phone
+     */
+    function getAward(base, oHttp, userId, phone, callback) {
+        var data = {"userId": userId, "phone": phone};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+
+        var url = "/share/award/";
+        url = oHttp + url + baseData;
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                res = JSON.parse(res);
+                console.log(res);
+                if (res.code == 1) {
+                    if (callback) callback();
+                }
+            },
+            error: function (err) {
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
 </script>
 </body>
 </html>

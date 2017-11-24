@@ -15,21 +15,27 @@
         <!-- 标题1 -->
         <div class="title1"></div>
         <div class="title2"></div>
-        <p class="myIntegral">我的积分：<span class="integral">999</span></p>
+        <p class="myIntegral">我的积分：<span class="integral">0</span></p>
         <!--  抽奖的卡牌  -->
         <ul class="cardWrap">
-            <li class="card card1"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
-            <li class="card card2"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
-            <li class="card card3"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
-            <li class="card card4"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
-            <li class="card card5"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
-            <li class="card card6"><img class="front" src="images/cardLottery/zimg1.png"><img class="opposite"
-                                                                                  src="images/cardLottery/cardBg.png" alt=""></li>
+            <li class="card card1"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
+            <li class="card card2"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
+            <li class="card card3"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
+            <li class="card card4"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
+            <li class="card card5"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
+            <li class="card card6"><img class="front" src="images/cardLottery/img000.png"><img class="opposite"
+                                                                                               src="images/cardLottery/cardBg.png"
+                                                                                               alt=""></li>
         </ul>
     </div>
 
@@ -46,7 +52,7 @@
     <!-- 主要区域内容 -->
     <div class="dialog-content">
         <h2 class="title">恭喜您中奖啦</h2>
-        <img class="prizeImg" src="images/cardLottery/zimg2.png" alt="奖品图">
+        <img class="prizeImg" src="images/cardLottery/img000.png" alt="奖品图">
         <br>
         <img class="showdown" src="images/cardLottery/showdown.png">
         <div class="btn">
@@ -54,12 +60,340 @@
             <img class="againBtn" src="images/cardLottery/againBtn.png">
         </div>
     </div>
-
 </div>
 <script src="js/zepto.min.js"></script>
 <script src="js/touch.js"></script>
 <script src="js/getUrlParam.js"></script>
 <script src="js/base64.js"></script>
-<script src="js/cardLottery/cardLottery.js"></script>
+<script src="js/getWddjUrl.js"></script>
+<script>
+    //1.加密
+    var base = new Base64();
+    var id; //中奖记录id,凭该记录id领奖
+
+    $(function () {
+        //通过url - 获取token
+        var oToken = $.getUrlParam('token');
+//        var oToken = "898E04B00BFEB8651D43981D63DE9C94";
+        //http前缀地址
+        var oHttp = getWddjUrl();
+
+        var flag = false;  //flag 记录卡片的正反面  正面 false
+        var clickCardFlag = false; //clickCardFlag 记录 ‘卡片’ 是否可以点击  可以 true
+        var startClickFlag = true; //记录是否可以点击 ‘开始按钮’
+        var integral;       //用来记录积分
+
+        //首次进来加载奖品图片数据
+        getProduct(oHttp, 2); //抽奖等级,1: 幸运转盘,2: 魔术扑克,3: 一锤定音
+
+        //获取积分值
+        getIntegral(oHttp, oToken, base, function () {
+            //获取积分数量
+            integral = $('.integral').text();
+        });
+
+
+        //点击开始按钮
+        $('.startBtn').tap(function () {
+            //积分大于5，可以进行抽奖
+            if (integral < 5 || !startClickFlag) {
+                if (integral < 5) {
+                    alert('积分不足');
+                }
+            } else {
+
+                //隐藏开始按钮
+                $('.startBtn').hide();
+                integral -= 5;
+                $('.integral').text(integral);  //积分数 - 5
+                // ‘开始按钮’ 点击过后变为false
+                startClickFlag = false;
+
+                //卡牌转到背面
+                rotateCardOpposite(function () {
+                    //卡牌转到背面以后 移动
+                    flag = true;
+                });
+
+                //获取屏幕的最大宽度
+                var mWidth = $(window).width();
+
+                //判断屏幕大小，然后进行位置移动
+                //大屏幕
+                if (mWidth > 320) {
+                    if (flag) {  //判断卡牌是否转到了背面
+                        //对卡牌进行移动
+                        var timer;
+                        var num = 5;
+                        timer = setInterval(function () {
+                            num--;
+                            moveCard();
+                            if (num == 0) {
+                                clearInterval(timer);
+                                clickCardFlag = true;
+                            }
+                        }, 500)
+                    }
+                }
+                //表示是小屏幕手机
+                else {
+                    if (flag) {  //判断卡牌是否转到了背面
+                        //对卡牌进行移动
+                        var timers;
+                        var nums = 5;
+                        timers = setInterval(function () {
+                            nums--;
+                            moveCardSmall();
+                            if (nums == 0) {
+                                clearInterval(timers);
+                                clickCardFlag = true
+                            }
+                        }, 500)
+                    }
+                }
+
+            }
+        });
+
+        //卡牌移动完毕，点击卡牌进行抽奖
+        $('.card>.opposite').tap(function () {
+            if (clickCardFlag) {
+                //发送请求
+                //获取到奖品以及奖品名称设置 奖品图片
+                getPrize(oHttp, 2, oToken);
+                //显示模态框
+                $('.dialog').show();
+                clickCardFlag = false;  //禁止再次点击卡牌
+            }
+        });
+
+        // 模态框 '领取' 按钮事件
+        $('.dialog .determineBtn').tap(function () {
+//            console.log(id);
+            flag = true;
+            startClickFlag = true;  //开始按钮可以点击
+            //跳转到领奖页面
+            window.location.href = oHttp + "/explain/winningLog.html?token=" + oToken;
+            //11月21号晚上改动：跳转到中奖纪录
+        });
+
+        // 模态框 '再来一次' 按钮事件
+        $('.dialog .againBtn').tap(function () {
+            //隐藏模态框
+            $('.dialog').hide();
+            //牌面转到正面  奖品这一面
+            rotateCardFront();
+            //更新奖品数据
+            getProduct(oHttp, 2, oToken); //抽奖等级,1: 幸运转盘,2: 魔术扑克,3: 一锤定音
+            //更新积分，重新请求积分数据,并设置到页面
+            getIntegral(oHttp, oToken, base);
+
+            flag = true; //卡片现在为正面
+            startClickFlag = true;  //开始按钮可以点击
+            $('.startBtn').show();  //显示开始按钮
+        })
+    });
+
+    /**
+     * 进行抽奖
+     * @param oHttp
+     * @param level
+     * @param token
+     */
+
+    function getPrize(oHttp, level, token) {
+        var data = {"level": level, "token": token};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/","gm"),"*");
+        var url = '/luckGame/doIt/';
+        url = oHttp + url + baseData;
+//        console.log(url);
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                //渲染模态框奖品
+                $('.dialog .prizeImg')[0].src = res.resData.imgUrlView;
+                //保存奖品id,用url传到下级页面->领取奖品页面
+                id = res.resData.id;
+            },
+            error: function (err) {
+                console.log(err);
+            }
+        })
+    }
+
+    /**
+     * 请求奖品列表数据
+     * @param oHttp
+     * @param level
+     * @param token
+     */
+    function getProduct(oHttp, level, token) {
+        var data = {"level": level, "token": token};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/","gm"),"*");
+        //拼接参数
+        var url = "/luckGame/data/";
+        url = oHttp + url + baseData;
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+//                console.log(JSON.parse(res)); //code: 1, msg: "请求成功"
+                res = JSON.parse(res);
+                //渲染奖品列表
+                if (res.code == 1) {
+                    $.each(res.resData, function (index, ele) {
+                        $('.cardWrap .front')[index].src = ele.imgUrlView;
+                    });
+                }
+            },
+            error: function (err) {
+                console.log(JSON.parse(err));
+            }
+        })
+    }
+
+    /**
+     * 对卡牌进行移动
+     * @param callback
+     */
+    function moveCard(callback) {
+        //随机打乱卡片卡片
+        //一个存放原来位置的数组
+        var positionArr = [
+            {top: 0, left: 0, right: 'initial', transform: 'translateX(0)'},
+            {top: 0, left: '50%', right: 'initial', transform: 'translateX(-50%)'},
+            {top: 0, left: 'initial', right: 0, transform: 'translateX(0)'},
+            {top: '142px', left: 0, right: 'initial', transform: 'translateX(0)'},
+            {top: '142px', left: '50%', right: 'initial', transform: 'translateX(-50%)'},
+            {top: '142px', left: 'initial', right: 0, transform: 'translateX(0)'}
+        ];
+        //获取打乱之后的数组
+        var temArr1 = roa(positionArr);
+
+        $('.card1').css(temArr1[0]);
+        $('.card2').css(temArr1[1]);
+        $('.card3').css(temArr1[2]);
+        $('.card4').css(temArr1[3]);
+        $('.card5').css(temArr1[4]);
+        $('.card6').css(temArr1[5]);
+        if (callback) callback()
+    }
+
+    /**
+     *  对卡牌进行移动(兼容小屏方法)
+     * @param callback
+     */
+    function moveCardSmall(callback) {
+        var positionArr2 = [
+            {top: 0, left: 0, right: 'initial', transform: 'translateX(0)'},
+            {top: 0, left: '50%', right: 'initial', transform: 'translateX(-50%)'},
+            {top: 0, left: 'initial', right: 0, transform: 'translateX(0)'},
+            {top: '130px', left: 0, right: 'initial', transform: 'translateX(0)'},
+            {top: '130px', left: '50%', right: 'initial', transform: 'translateX(-50%)'},
+            {top: '130px', left: 'initial', right: 0, transform: 'translateX(0)'}
+        ];
+        var temArr2 = roa(positionArr2);
+        $('.card1').css(temArr2[0]);
+        $('.card2').css(temArr2[1]);
+        $('.card3').css(temArr2[2]);
+        $('.card4').css(temArr2[3]);
+        $('.card5').css(temArr2[4]);
+        $('.card6').css(temArr2[5]);
+        if (callback) callback()
+    }
+
+    /**
+     * 随机arr
+     * @param arr 需要进行随机化的数组
+     * @returns {Array} 返回随机排列之后的数组
+     */
+    function roa(arr) {
+        //arr为可能出现的元素集合
+        var temp = new Array();    //temp存放生成的随机数组
+        var count = arr.length;
+        for (var i = 0; i < count; i++) {
+            var num = Math.floor(Math.random() * arr.length); //生成随机数num
+            temp.push(arr[num]);    //获取arr[num]并放入temp
+            arr.splice(num, 1);
+        }
+        return temp;
+    }
+
+    /**
+     * 牌面翻到背面
+     * @param callback
+     */
+    function rotateCardOpposite(callback) {
+        //翻转背面
+        $.each($('.card>.opposite'), function (index, ele) {
+            $(ele).css({transform: 'rotateY(0)'});
+        });
+        //翻转正面
+        $.each($('.card>.front'), function (index, ele) {
+            $(ele).css({transform: 'rotateY(180deg)'});
+        });
+        //是否需要执行回调函数
+        if (callback) callback();
+    }
+
+    /**
+     * 牌面翻到正面 到奖品这一面
+     * @param callback
+     */
+    function rotateCardFront(callback) {
+        //转背面
+        $.each($('.card>.opposite'), function (index, ele) {
+            $(ele).css({transform: 'rotateY(180deg)'});
+        });
+        //转正面
+        $.each($('.card>.front'), function (index, ele) {
+            $(ele).css({transform: 'rotateY(0)'});
+        });
+        //是否需要执行回调函数
+        if (callback) callback();
+    }
+
+    /**
+     * 获取用户剩余积分
+     * @param oHttp
+     * @param oToken
+     * @param base
+     * @param callback
+     */
+    function getIntegral(oHttp, oToken, base, callback) {
+        var data = {"token": oToken};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/","gm"),"*");
+        //拼接参数
+        var url = "/luckGame/getIntegral/";
+        url = oHttp + url + baseData;
+//        console.log(url);
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                if (res.code == 1) {
+                    $('.integral').text(res.resData.integral);  //设置 我的积分num
+                }
+                if (callback) callback();
+            },
+            error: function (err) {
+                console.log(err);
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+</script>
 </body>
 </html>
