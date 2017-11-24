@@ -224,7 +224,7 @@
 
         //点击领奖
         $("#goPrizeList").click(function () {
-            window.location.href = oHttp + "/explain/winningLog.html?token=" + oToken;
+            window.location.href = "winningRecord.html?token=" + oToken;
         });
 
     });
@@ -284,7 +284,7 @@
             type: "POST",
             success: function (res) {
                 res = JSON.parse(res);
-                console.log(res);
+//                console.log(res);
                 if (res.code == 1) {
                     //设置中奖的图片
 //                    $('#productImgSrc').attr("src", res.resData.imgUrlView);

@@ -275,7 +275,6 @@
                 }
             }
             else if (prizetype == 4) {
-
                 var name = $('#name').val();
                 var phone = $('#phone').val();
 
@@ -300,12 +299,12 @@
         $(".closeimg").click(function () {
             $(".popup").hide();
             //点击确定之后要跳转的事件
-            window.location.href = "中奖详情.html?token=" + oToken + "&prizeid=" + prizeid;
+            window.location.href = "winningRecord.html?token=" + oToken + "&prizeid=" + prizeid;
         });
         $(".okbutton2").click(function () {
             $(".popup").hide();
             //点击确定之后要跳转的事件
-            window.location.href = "中奖详情.html?token=" + oToken + "&prizeid=" + prizeid;
+            window.location.href = "winningRecord.html?token=" + oToken + "&prizeid=" + prizeid;
         });
     });
 
@@ -328,10 +327,10 @@
             "id": id,
             "recipientsName": name,
             "recipientsPhone": phone,
-            "province": province || '',
-            "city": city || '',
-            "region": region || '',
-            "detail": address || ''
+            "province": province || '无',
+            "city": city || '无',
+            "region": region || '无',
+            "detail": address || '无'
         };
 //        console.log("token:  " + data.token);
 //        console.log("id:  " + data.id);

@@ -48,12 +48,11 @@
                 if (flag) {
                     flag = false;
                     pageNo += 1;
-                    console.log("pageNo" + pageNo);
+//                    console.log("pageNo" + pageNo);
                     getPrizeList(oToken, oHttp, base, pageNo, function () {
                         flag = true;
                     });
                 }
-
             }
         });
 
@@ -71,13 +70,14 @@
             //去掉特殊的斜杠，已保证url地址的正确性
             baseData = baseData.replace(new RegExp("/", "gm"), "*");
             url = oHttp + url + baseData;
-//            console.log(url);
+//            url = 'http://local.bjwddj.com:9999' + url + baseData;
+            //console.log(url);
             $.ajax({
                 url: url,
                 type: "GET",
                 success: function (res) {
                     res = JSON.parse(res);
-                    console.log(res);
+//                    console.log(res);
 
                     var oStatus;
                     var oHref;
@@ -125,7 +125,7 @@
                         if (callback) callback();
 
                         //没有数据是，不在向后台请求数据
-                        if (res.resData.length === 0) {
+                        if (res.resData.length < 10) {
                             flag = false;
                         }
                     }

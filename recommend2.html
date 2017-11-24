@@ -21,7 +21,7 @@
     </div>
     <form>
         <p>
-            <a class="link1" href="###">下载微东到家<img src="images/Instructions/img4.png" alt=""/></a>
+            <span id="downWddjApp" class="link1">下载微东到家<img src="images/Instructions/img4.png" alt=""/></span>
         </p>
         <p>
             <a class="link2" href="activityDetail.html">活动说明</a>
@@ -33,49 +33,24 @@
 <script src="js/phone.js"></script>
 <script src="js/zepto.min.js"></script>
 <script src="js/touch.js"></script>
-<script src="js/getUrlParam.js"></script>
 <script>
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
     $(function () {
 
-        //获取token
-        var oToken = $.getUrlParam('token');
-        //获取邀请人的信息
-        invitePerson(oToken);
+        $("#downWddjApp").tap(function () {
+            if(isiOS){
+                //   跳转到APPstore地址
+            }else if(isAndroid){
+                //   跳转到安卓地址
+            }
+        })
+
 
     });
 
-    /**
-     * 获取邀请人的信息
-     * @param oToken
-     */
-    function invitePerson(oToken) {
-//    <li>小薇薇 邀请</li>
-//        <li>你加入微东到家</li>
-//        <li><span>40元</span>现金奖励</li>
-        var url = "data/Instructions/invitePerson.json";
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function (res) {
-                var oul = $("<ul class='list2'></ul>");
-//            <ul class="list2">
-//                    <li>恭喜您</li>
-//                    <li>您已获得40元奖励！</li>
-//                <li>按规定完成5单任务后自动发放</li>
-//                </ul>
-                oul.html(
-                    '<li>恭喜您</li>' +
-                    '<li>您已获得' + res.data.inviteMoney + '元奖励！</li>' +
-                    '<li>按规定完成5单任务后自动发放</li>'
-                );
-                $('.redpacket').append(oul);
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        })
-    }
 </script>
 </body>
 </html>

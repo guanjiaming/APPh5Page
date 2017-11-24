@@ -29,7 +29,7 @@ define(function () {
         getPrize(base, oHttp, 3, token, function () {
             //点击领取奖品，跳转到列表
             $('.btn_Get').click(function () {
-                window.location.href = oHttp + "/explain/winningLog.html?token=" + token;
+                window.location.href = "winningRecord.html?token=" + token;
                 //跳转到
             })
         });

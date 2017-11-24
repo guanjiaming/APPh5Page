@@ -233,7 +233,9 @@
         //奖品状态
         var preziStatus;
         if (obj.status == 0) {
-            preziStatus = "奖品正在陆续发放中,请稍后查看"
+            preziStatus = "奖品正在陆续发放中,请稍后查看";
+            obj.expressName = "暂无信息";
+            obj.expressNumber = "暂无信息";
         } else if (obj.status == 1) {
             preziStatus = "已发放"
         }
@@ -251,10 +253,11 @@
             '<div class="productDesc">' +
             '<p>' + obj.description + '</p>' +
             '</div>' +
-            '<div class="productPrice"><p>' + obj.price + '</p></div></div>'
+            '<div class="productPrice"><p>￥ ' + obj.price + '元</p></div></div>'
         );
         //其他信息
         var otherInfo = $('<div class="otherInfo"></div>');
+
         otherInfo.html(
             '<p class="otherInfoTitle">收件人信息</p>' +
             '<div class="otherInfoDesc">' +
@@ -292,7 +295,7 @@
             '<div class="productDesc">' +
             '<p>' + obj.description + '</p>' +
             '</div>' +
-            '<div class="productPrice"><p>' + obj.price + '</p></div></div>'
+            '<div class="productPrice"><p>￥ ' + obj.price + '元</p></div></div>'
         );
         //其他信息
         var otherInfo = $('<div class="otherInfo"><p class="otherInfoTitle">' + obj.content + '</p></div>');

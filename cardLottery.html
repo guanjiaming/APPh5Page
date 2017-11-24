@@ -95,6 +95,7 @@
 
         //点击开始按钮
         $('.startBtn').tap(function () {
+            integral = $('.integral').text();
             //积分大于5，可以进行抽奖
             if (integral < 5 || !startClickFlag) {
                 if (integral < 5) {
@@ -155,7 +156,7 @@
             }
         });
 
-        //卡牌移动完毕，点击卡牌进行抽奖
+        //点击卡牌进行抽奖
         $('.card>.opposite').tap(function () {
             if (clickCardFlag) {
                 //发送请求
@@ -173,7 +174,7 @@
             flag = true;
             startClickFlag = true;  //开始按钮可以点击
             //跳转到领奖页面
-            window.location.href = oHttp + "/explain/winningLog.html?token=" + oToken;
+            window.location.href = "winningRecord.html?token=" + oToken;
             //11月21号晚上改动：跳转到中奖纪录
         });
 
@@ -187,6 +188,7 @@
             getProduct(oHttp, 2, oToken); //抽奖等级,1: 幸运转盘,2: 魔术扑克,3: 一锤定音
             //更新积分，重新请求积分数据,并设置到页面
             getIntegral(oHttp, oToken, base);
+
 
             flag = true; //卡片现在为正面
             startClickFlag = true;  //开始按钮可以点击

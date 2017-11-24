@@ -13,7 +13,7 @@
     <div class="redpacket">
         <img class="img2" src="images/Instructions/img3.png"/>
         <ul class="list1">
-            <li>小薇薇 邀请</li>
+            <li id="nickName">小薇薇 邀请</li>
             <li>你加入微东到家</li>
             <li>送您<span>10</span>积分</li>
             <li>积分可以抽奖哦</li>
@@ -22,7 +22,7 @@
     <form>
         <p><input type="tel" id="telephone" placeholder="请输入手机号码"></p>
         <p>
-            <span class="link1" href="###">领取奖励<img src="images/Instructions/img4.png" alt=""/></span>
+            <span class="link1">领取奖励<img src="images/Instructions/img4.png"/></span>
         </p>
         <p>
             <a class="link2" href="activityDetail.html">活动说明</a>
@@ -37,16 +37,15 @@
 <script src="js/getWddjUrl.js"></script>
 <script src="js/base64.js"></script>
 <script>
-
     $(function () {
-
         //获取token
-//        var userId = $.getUrlParam('userId');
-        var userId = 199;
+        var userId = $.getUrlParam('userId');
+//        var userId = 199;
         var oHttp = getWddjUrl();
         var base = new Base64();
         //获取昵称
         getUserName(base, oHttp, userId);
+
         //点击领取按钮
         $('.link1').tap(function () {
             //获取手机号
@@ -54,7 +53,9 @@
             console.log("phone:" + phone);
             //手机号格式填写正确以后
             if (isRightPhoneNumber(phone)) {
+                //向后台发送
                 getAward(base, oHttp, userId, phone, function () {
+                    //跳转到 已获得积分奖励页面
                     window.location.href = oHttp + "/explain/recommendAfter.html";
                 });
             }
@@ -65,30 +66,6 @@
         });
 
     });
-
-
-    function invitePerson(oToken) {
-//    <li>小薇薇 邀请</li>
-//        <li>你加入微东到家</li>
-//        <li><span>40元</span>现金奖励</li>
-        var url = "data/Instructions/invitePerson.json";
-        $.ajax({
-            url: url,
-            type: "GET",
-            success: function (res) {
-                var oul = $("<ul class='list1'></ul>");
-                oul.html(
-                    '<li>' + res.data.invitePersonName + '邀请</li>' +
-                    '<li>你加入微东到家</li>' +
-                    '<li><span>' + res.data.inviteMoney + '元</span>现金奖励</li>'
-                );
-                $('.redpacket').append(oul);
-            },
-            error: function (err) {
-                console.log(err);
-            }
-        })
-    }
 
 
     /**invite
@@ -119,14 +96,18 @@
 
         var url = "/user/getNickname/";
         url = oHttp + url + baseData;
+
         $.ajax({
             url: url,
             type: "GET",
             success: function (res) {
                 res = JSON.parse(res);
-                console.log(res);
+//                console.log(res);
                 if (res.code == 1) {
-
+                    //把从后台获取到的昵称设置到页面上
+                    $("#nickName").text(res.resData.nickname + "    邀请");
+                }else{
+                    alert(res.msg)
                 }
             },
             error: function (err) {
@@ -141,6 +122,7 @@
      * @param oHttp
      * @param userId
      * @param phone
+     * @param callback
      */
     function getAward(base, oHttp, userId, phone, callback) {
         var data = {"userId": userId, "phone": phone};
@@ -159,6 +141,8 @@
                 console.log(res);
                 if (res.code == 1) {
                     if (callback) callback();
+                }else{
+                    alert(res.msg)
                 }
             },
             error: function (err) {
