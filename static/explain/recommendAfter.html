@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>推荐有奖</title>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <script src="../js/phone.js"></script>
+</head>
+<body style="background:#94a1f9; padding-bottom: 30px;">
+<div class="tuijianBox">
+    <img class="img1" src="../images/Instructions/img1.jpg" alt=""/>
+    <div class="redpacket">
+        <img class="img3" src="../images/Instructions/img5.png" alt=""/>
+        <ul class="list2">
+            <li>恭喜您</li>
+            <li>您已获得10积分！</li>
+            <li>积分可以抽奖，奖品多多等你来拿</li>
+        </ul>
+    </div>
+    <form>
+        <p>
+            <span id="downWddjApp" class="link1">下载微东到家<img src="../images/Instructions/img4.png" alt=""/></span>
+        </p>
+        <p>
+            <a class="link2" href="activity.html">活动说明</a>
+        </p>
+    </form>
+</div>
+
+
+<script src="../js/phone.js"></script>
+<script src="../js/zepto.min.js"></script>
+<script src="../js/touch.js"></script>
+<script>
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+    $(function () {
+
+        $("#downWddjApp").tap(function () {
+            if(isiOS){
+                //   跳转到APPstore地址
+            }else if(isAndroid){
+                //   跳转到安卓地址
+            }
+        })
+    });
+
+</script>
+</body>
+</html>

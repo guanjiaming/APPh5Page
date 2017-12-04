@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>版本说明</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            border: none;
+        }
+
+        html, body {
+            background: #fff;
+            width: 100%;
+        }
+
+        body {
+            background: #fff;
+            padding-bottom: 20px;
+
+        }
+
+        .content {
+            max-width: 600px;
+            margin: 0 auto;
+
+        }
+
+        .content ul > li {
+            /*height: 49px;*/
+            box-sizing: border-box;
+            position: relative;
+            /*padding-left: 13px;*/
+            margin-bottom: 10px;
+        }
+
+        .content .wdVlistTop {
+            padding-top: 9px;
+            height: 49px;
+            padding-left: 13px;
+            box-sizing: border-box;
+            border-bottom: 1px solid #e1e1e1;
+
+        }
+
+        .content .wdVlistName {
+            font-size: 12px;
+            /*font-weight: 600;*/
+            color: #070707;
+            line-height: 16px;
+
+        }
+
+        .content .wdVlistDate {
+            font-size: 10px;
+            color: #757575;
+            line-height: 16px;
+        }
+
+        .content .rightArrows {
+            background: url(../images/rightArrows.png) no-repeat;
+            -webkit-background-size: 20px;
+            background-size: 20px;
+            width: 20px;
+            height: 20px;
+            position: absolute;
+            right: 5px;
+            top: 15px;
+            transition: all 0.3s;
+        }
+
+        /*  展开的内容  */
+        .content .wdVlistDetail {
+            padding: 10px 10px 10px 13px;
+            background: #f3f7f7;
+            font-size: 12px;
+            line-height: 25px;
+            display: none;
+            transition: all 0.3s;
+        }
+
+        .content ol > li {
+            font-size: 12px;
+        }
+
+        /* 右侧箭头旋转 */
+        .rightArrowsCurrent {
+            transform: rotateZ(90deg);
+        }
+
+        /* 需要隐藏和显示的内容 */
+        .wdslideToggle{
+            display: block;
+            /*transition: all 0.3s;*/
+            position: relative;
+            -webkit-animation: myMove 0.5s ;
+            -o-animation: myMove 0.5s ;
+            animation: myMove 0.5s ;
+        }
+
+        @keyframes myMove {
+            from{
+                transform: translateY(-800px);
+            }
+            to{
+                transform: translateY(0);
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="content">
+    <ul id="wdVlist">
+        <!-- 静态样式模板 -->
+        <!--<li>-->
+            <!--<div class="wdVlistTop">-->
+                <!--<p class="wdVlistName">微东到家3.0.1主要更新</p>-->
+                <!--<p class="wdVlistDate">2017年12月27日</p>-->
+                <!--<span class="rightArrows"></span>-->
+            <!--</div>-->
+            <!--&lt;!&ndash; 展开的列表内容 &ndash;&gt;-->
+            <!--<ol class="wdVlistDetail">-->
+                <!--<li>1.版本更新</li>-->
+                <!--<li>2.版本再次更新</li>-->
+                <!--<li>3.版本又一次更新</li>-->
+            <!--</ol>-->
+        <!--</li>-->
+    </ul>
+</div>
+</body>
+
+<script src="../js/zepto.min.js"></script>
+<script src="../js/touch.js"></script>
+<script src="../js/animate.js"></script>
+<script src="../js/fade.js"></script>
+<script src="../js/getWddjUrl.js"></script>
+<script src="../js/base64.js"></script>
+<!--<script src=""></script>-->
+<script>
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+</script>
+<script>
+    var oHttp = getWddjUrl();
+
+    var base = new Base64();
+    var pageNo = 1;
+    var phoneType;
+    var flag;
+    $(function () {
+        //赋值手机类型
+        if (isAndroid) {
+            phoneType = 2;
+            console.log("2")
+        }
+        else if (isiOS) {
+            phoneType = 1;
+        }
+
+        //首次进来，加载数据
+        getV(oHttp, base, phoneType, pageNo);
+
+        //当窗口滚动的时候 加载数据
+        $(window).on('scroll', function () {
+            //是否符合加载条件
+            if (checkWillLoadBox()) {
+                if (flag) {
+                    flag = false;
+                    pageNo += 1;
+//                    console.log("pageNo" + pageNo);
+                    getV(oHttp, base, phoneType, pageNo, function () {
+                        flag = true;
+                    });
+                }
+            }
+        });
+
+        //点击展开事件
+        $("body").on('tap','#wdVlist>li',function () {
+            $(this).find('.wdVlistDetail').toggle();
+            $(this).find('.rightArrows').toggleClass("rightArrowsCurrent");
+        });
+
+        /**
+         * 实现是否具备滚动的条件
+         * @returns {boolean}
+         */
+        function checkWillLoadBox() {
+            // 1.1 拿到最后的盒子
+            var lastBox = $('#wdVlist li').last();
+//            console.log(lastBox);
+
+            // 1.2 求出最后一个盒子的高度的一半 + 头部偏离的位置
+            var lastBoxDis = $(lastBox).height() * 0.5 + $(lastBox).offset().top;
+//            console.log(lastBoxDis);
+
+            // 1.3 求出窗口的高度
+            var clientHeight = $(window).height();
+            var scrollTopHeight = $(window).scrollTop();
+
+//            console.log(clientHeight);
+//            console.log(scrollTopHeight);
+
+            return lastBoxDis <= clientHeight + scrollTopHeight;
+        }
+
+        /**
+         * 获取版本功能信息
+         * @param oHttp
+         * @param base
+         * @param phoneType
+         * @param pageNo
+         * @param callback
+         */
+        function getV(oHttp, base, phoneType, pageNo, callback) {
+            var date = new Date();
+            var data = {"type": phoneType, "pageNo": pageNo,"time": date.getTime()};
+            var baseData = base.encode(JSON.stringify(data));
+            //去掉特殊的斜杠，已保证url地址的正确性
+            baseData = baseData.replace(new RegExp("/", "gm"), "*");
+            //将data拼接到url地址后面
+            var url = oHttp + "/version/list/";
+            url = url + baseData;
+
+            $.ajax({
+                url: url,
+                type: "GET",
+                success: function (res) {
+                    res = JSON.parse(res);
+//                    console.log(res);
+                    if (res.code == 1) {
+                        //遍历创建dom节点
+                        $.each(res.resData, function (index, ele) {
+
+                            var descArr = ele.description.split("|");
+//                            console.log(descArr);
+                            var oLi = $('<li></li>');
+                            var oOl = $('<ol class="wdVlistDetail"></ol>');
+
+                            oLi.html(
+                                '<div class="wdVlistTop">' +
+                                '<p class="wdVlistName">微东到家3.0.1主要更新</p>' +
+                                '<p class="wdVlistDate">2017年12月27日</p>' +
+                                '<span class="rightArrows"></span>' +
+                                '</div>'
+                            );
+
+                            // 遍历添加ol
+                            $.each(descArr, function (index, ele) {
+//                                console.log(ele);
+                                var wdli = $('<li>'+ ele +'</li>');
+                                oOl.append(wdli);
+                            });
+
+                            oLi.append(oOl);
+                            //添加到html中
+                            $('#wdVlist').append(oLi);
+                        });
+
+                        //添加完节点之后要做的事情
+                        if (callback) callback();
+
+                        //没有数据是，不在向后台请求数据
+                        if (res.resData.length < 10) {
+                            flag = false;
+                        }
+
+                    } else {
+                        alert(res.msg)
+                    }
+                },
+                error: function () {
+                    alert("网络错误，请重新加载！");
+                }
+            })
+        }
+    })
+</script>
+</html>

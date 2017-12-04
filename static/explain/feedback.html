@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>意见反馈</title>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <style>
+        body {
+            position: relative;
+        }
+
+        .dialog {
+            width: 100%;
+            position: fixed;
+            top: -40px;
+            left: 0;
+            height: 40px;
+            z-index: 1;
+            color: #fff;
+            /*display: none;*/
+            -webkit-transform: translate3d(0, 0, 0);
+            -moz-transform: translate3d(0, 0, 0);
+            -ms-transform: translate3d(0, 0, 0);
+            transform: translate3d(0, 0, 0);
+        }
+
+        .dialogTit {
+            text-align: center;
+            line-height: 40px;
+            font-size: 14px;
+        }
+
+        .dialogErrColor {
+            background: #ff2b2b;
+            display: block;
+            animation: wdDown 4s;
+        }
+
+        .dialogSuccessColor {
+            background: #04d29d;
+            display: block;
+            animation: wdDown 4s;
+        }
+
+        @keyframes wdDown {
+            0% {
+                top: -40px;
+                opacity: 0
+            }
+            18% {
+                top: 0;
+                opacity: 1
+            }
+            50% {
+                top: 0;
+                opacity: 1
+            }
+            82% {
+                top: 0;
+                opacity: 1
+            }
+            100% {
+                top: -40px;
+                opacity: 0
+            }
+        }
+
+    </style>
+</head>
+<body style="background:#f3f7f7;">
+<div id="dialog" class="dialog">
+    <p class="dialogTit"></p>
+</div>
+<form>
+    <textarea id="content"
+              class="feedback"
+              style="resize: none; overflow: scroll;overflow-x:hidden;position: relative"
+              placeholder="您好我是微东，您有什么意见或建议尽请提出"
+
+    ></textarea>
+    <button id="feedbackBtn" class="feedbtn" type="button">确定</button>
+</form>
+
+<script src="../js/phone.js"></script>
+<script src="../js/zepto.min.js"></script>
+<script src="../js/touch.js"></script>
+<script src="../js/getUrlParam.js"></script>
+<script src="../js/base64.js"></script>
+<script src="../js/getWddjUrl.js"></script>
+<script>
+    //获取token
+    var oToken = $.getUrlParam('token');
+    //http前缀地址
+    var oHttp = getWddjUrl();
+    //1.加密
+    var base = new Base64();
+    // var result = base.encode(str);
+
+    //点击发送按钮
+    $("#feedbackBtn").tap(function () {
+        var content = $.trim($("#content").val());
+        //判断输入的长度
+        if (content.length > 255 || content.length <= 0) {
+            //顶部提示
+            $('.dialogTit').text("意见反馈不能为空并且在255字以内");
+            $("#dialog").addClass('dialogErrColor');
+            setTimeout(function () {
+                $("#dialog").removeClass('dialogErrColor');
+            }, 4000);
+
+        } else {
+            var url = oHttp + "/feedbackLog/save/";
+            sendContent(url, oToken, content);
+        }
+    });
+
+    /**
+     * 发送 意见反馈方法
+     * @param url
+     * @param token
+     * @param content
+     */
+    function sendContent(url, token, content) {
+        var date = new Date();
+        var body = {"token": token, "content": content, "time": date.getTime()};
+        var baseData = base.encode(JSON.stringify(body));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        //将data拼接到url地址后面
+        url = url + baseData;
+        $.ajax({
+            url: url,
+            type: "POST",
+            contentType: "application/json; charset=utf-8",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                if (res.code == 1) {
+                    $('.dialogTit').text(res.msg);
+                    $("#dialog").addClass('dialogSuccessColor');
+                    setTimeout(function () {
+                        $("#dialog").removeClass('dialogSuccessColor');
+                    }, 4000);
+
+                } else {
+                    if(res.msg != "令牌有误"){
+                        //提示
+                        $('.dialogTit').text(res.msg);
+                        $("#dialog").addClass('dialogErrColor');
+                        setTimeout(function () {
+                            $("#dialog").removeClass('dialogErrColor');
+                        }, 4000);
+                    }
+                }
+            },
+            error: function (err) {
+                console.log(err);
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+</script>
+</body>
+</html>

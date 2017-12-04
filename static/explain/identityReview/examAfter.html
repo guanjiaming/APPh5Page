@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>在线考试</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../../css/exam.css">
+</head>
+<body>
+
+<!--  考试页面  -->
+<div class="container">
+    <div class="row clearfix" id="testArea">
+
+    </div>
+</div>
+<!--window-->
+<!--  考试未通过弹窗  -->
+<div class="windowBox windowBox1">
+    <div class="window ">
+        <p class="Wtitle">答题结束</p>
+        <div class="Wanswer">
+            <span class="Wtest1"></span>
+            <img src="../../images/OnlineTest/icon1.png" alt=""/>
+            <span class="Wtest2"></span>
+            <img src="../../images/OnlineTest/icon2.png" alt=""/>
+        </div>
+        <p class="Wbutton">
+            <span id="goOnBtn">继续</span>
+            <span id="exitBtn">退出</span>
+        </p>
+    </div>
+</div>
+<!--  考试通过弹窗  -->
+<div class="windowBox windowBox2">
+    <div class="window">
+        <p class="Wtitle">答题结束</p>
+        <div class="Wanswer">
+            <span>恭喜您，答题正确</span>
+        </div>
+        <p class="Wbutton">
+            <a id="finish" class="Wokbtn">确定</a>
+        </p>
+    </div>
+</div>
+
+<!--<script type="text/javascript" src="js/jquery-1.11.3.min.js"></script>-->
+<script src="../../js/zepto.min.js"></script>
+<script src="../../js/touch.js"></script>
+<script src="../../js/getUrlParam.js"></script>
+<script src="../../js/OnlineTest/test.js"></script>
+<script src="../../js/phone.js"></script>
+<script src="../../js/base64.js"></script>
+<script src="../../js/animate.js"></script>
+<script src="../../js/fade.js"></script>
+<script src="../../js/getWddjUrl.js"></script>
+<script>
+    var u = navigator.userAgent;
+    var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+    var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+</script>
+<!--  考试js  -->
+<script type="text/javascript">
+    /*点击复选框样式切换*/
+    $(function () {
+
+        //获取token
+        var oToken = $.getUrlParam('token');
+        //获取http前缀地址
+        var oHttp = getWddjUrl();
+        //1.加密
+        var base = new Base64();
+
+        //题型    1单选，2多选
+        //json    格式参照data/test.json
+        //交卷    点击交卷后可查看对错
+        var test_id = 'get a test id';
+        test(test_id);
+
+        //答题正确以后，点击确定按钮
+        $('#finish').tap(function () {
+//            console.log(oToken);
+            //拼接域名和api
+            var url = oHttp + "/identityReview/examPass/";
+            //给后台发送数据 -> 已经完成考试
+            sendExamResult(url, oToken);
+        });
+
+        //继续按钮
+        $("#goOnBtn").click(function () {
+            window.location.reload();
+        });
+        //退出按钮
+        $('#exitBtn').click(function () {
+            //跳回到原生界面 -> 认证考核
+            exitExam(0);
+        });
+
+        //单选多选按钮
+        $('input[type="radio"]').click(function () {
+            if ($('input[type="radio"]:checked')) {
+                $(this).siblings().find(".cricle2").show();
+                $(this).parents(".radio").siblings().find(".cricle2").hide();
+            }
+        });
+        $('input[type="checkbox"]').click(function () {
+            if ($('input[type="checkbox"]:checked')) {
+                $(this).siblings().find(".cricle2").toggle();
+            }
+        });
+
+        /**
+         * 给后台发送考试通过
+         * @param url
+         * @param token
+         */
+        function sendExamResult(url, token) {
+            var date = new Date();
+            var data = {"token": token,"time": date.getTime()};
+            var baseData = base.encode(JSON.stringify(data));
+            //去掉特殊的斜杠，已保证url地址的正确性
+            baseData = baseData.replace(new RegExp("/", "gm"), "*");
+
+            //将data拼接到url地址后面
+            url = url + baseData;
+            $.ajax({
+                url: url,
+                type: "POST",
+                contentType: "application/json; charset=utf-8",
+                success: function (res) {
+                    res = JSON.parse(res);
+//                    console.log(res);
+                    if (res.code == 1) {
+                        exitExam(1);
+                    } else {
+//                        alert(res.msg);
+                        //后台返回错误，认证失败
+                        exitExam(0);
+                    }
+                },
+                error: function (err) {
+                    console.log(err);
+                    alert("网络错误，请重新加载");
+                }
+            })
+        }
+
+        //原生监听我这边的方法
+        function exitExam(args) {
+            if (isAndroid) {
+                window.jsObj.postMessage(args);
+            }
+            if (isiOS) {
+                window.webkit.messageHandlers.exitExam.postMessage({body: args});
+            }
+        }
+    })
+</script>
+</body>
+</html>

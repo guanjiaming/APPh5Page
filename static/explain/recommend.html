@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>推荐有奖</title>
+    <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+</head>
+<body style="background:#94a1f9; padding-bottom: 30px;">
+<div class="tuijianBox">
+    <img class="img1" src="../images/Instructions/img1.jpg"/>
+    <div class="redpacket">
+        <img class="img2" src="../images/Instructions/img3.png"/>
+        <ul class="list1">
+            <li id="nickName">微东到家 邀请</li>
+            <li>你加入微东到家</li>
+            <li>送您<span>10</span>积分</li>
+            <li>积分可以抽奖哦</li>
+        </ul>
+    </div>
+    <form>
+        <p><input type="tel" id="telephone" placeholder="请输入手机号码"></p>
+        <p>
+            <span class="link1">领取奖励<img src="../images/Instructions/img4.png"/></span>
+        </p>
+        <p>
+            <a class="link2" href="activity.html">活动说明</a>
+        </p>
+    </form>
+</div>
+
+<script src="../js/phone.js"></script>
+<script src="../js/zepto.min.js"></script>
+<script src="../js/touch.js"></script>
+<script src="../js/getUrlParam.js"></script>
+<script src="../js/getWddjUrl.js"></script>
+<script src="../js/base64.js"></script>
+<script>
+    $(function () {
+        //获取token
+        var userId = $.getUrlParam('userId');
+//        var userId = 199;
+        var oHttp = getWddjUrl();
+        var base = new Base64();
+        //获取昵称
+        getUserName(base, oHttp, userId);
+
+        //点击领取按钮
+        $('.link1').tap(function () {
+            //获取手机号
+            var phone = $('#telephone').val();
+//            console.log("phone:" + phone);
+            //手机号格式填写正确以后
+            if (isRightPhoneNumber(phone)) {
+                //如果存在用户id则想后台发送
+                if (userId) {
+                    //向后台发送
+                    getAward(base, oHttp, userId, phone, function () {
+                        //跳转到 已获得积分奖励页面
+                        window.location.href = "recommendAfter.html";
+                    });
+                }
+
+            }
+            //不填写手机号或者手机号格式错误
+            else {
+                alert("手机号不正确");
+            }
+        });
+
+    });
+
+
+    /**invite
+     * 判断是不是一个手机号，返回0 表示不是， 返回1 表示是
+     * @param val
+     * @returns {number}
+     */
+    function isRightPhoneNumber(val) {
+        var re = /^(13[0-9]{9})|(15[0-9][0-9]{8})|(18[0-9][0-9]{8})|(17[0][0-9]{8})|(14[7][0-9]{8})$/;
+        if (!re.test(val)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    };
+
+    /**
+     * 获取用户昵称
+     * @param base
+     * @param oHttp
+     * @param userId
+     */
+    function getUserName(base, oHttp, userId) {
+        var date = new Date();
+        var data = {"userId": userId, "time": date.getTime()};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+
+        var url = "/user/getNickname/";
+        url = oHttp + url + baseData;
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                if (res.code == 1) {
+                    //把从后台获取到的昵称设置到页面上
+                    $("#nickName").text(res.resData.nickname + "    邀请");
+                } else {
+                    alert(res.msg)
+                }
+            },
+            error: function (err) {
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+
+    /**
+     * 领取奖励
+     * @param base
+     * @param oHttp
+     * @param userId
+     * @param phone
+     * @param callback
+     */
+    function getAward(base, oHttp, userId, phone, callback) {
+        var date = new Date();
+        var data = {"userId": userId, "phone": phone, "time": date.getTime()};
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+
+        var url = "/share/award/";
+        url = oHttp + url + baseData;
+
+        $.ajax({
+            url: url,
+            type: "GET",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                if (res.code == 1) {
+                    if (callback) callback();
+                } else {
+                    alert(res.msg)
+                }
+            },
+            error: function (err) {
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+</script>
+</body>
+</html>

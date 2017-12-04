@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta name="format-detection" content="telephone=no"/>
+    <title>填写领奖信息</title>
+    <style type="text/css">
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        img {
+            border: none;
+        }
+
+        body {
+            background: #f3f7f7;
+            font-family: "SimHei";
+            padding-bottom: 4.0rem;
+            font-size: 12px;
+        }
+
+        .agreetitle {
+            background: #fff;
+            height: 3.75rem;
+            line-height: 3.75rem;
+            font-size: 1.45rem;
+            color: #000;
+            border-bottom: 1px solid #eeeeee;
+            text-align: center;
+        }
+
+        .returnimg {
+            position: absolute;
+            left: 1.87rem;
+            top: 1.194rem;
+            width: 0.725rem;
+        }
+
+        .informationBox {
+            margin-top: 0.85rem;
+            background: #fff;
+            padding: 0 1.45rem;
+        }
+
+        .informationBox p {
+            overflow: hidden;
+            height: 4.0rem;
+            line-height: 4.0rem;
+            border-bottom: 1px solid #dedede;
+        }
+
+        .informationBox p label {
+            float: left;
+            font-size: 1.28rem;
+            color: #000;
+        }
+
+        .informationBox p input {
+            float: left;
+            font-size: 1.28rem;
+            color: #555555;
+            width: 70%;
+            height: 3.0rem;
+            margin-top: 0.5rem;
+            border: none;
+            outline: none;
+        }
+
+        .informationBox p select {
+            float: left;
+            font-size: 1.28rem;
+            color: #555555;
+            width: 79%;
+            height: 3.0rem;
+            margin-top: 0.5rem;
+            border: none;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .notes {
+            padding: 0 1.45rem;
+            font-size: 1.024rem;
+            color: #555;
+            line-height: 3.4rem;
+        }
+
+        .okbutton1 {
+            font-family: "SimHei";
+            font-size: 1.536rem;
+            color: #fff;
+            width: 84%;
+            height: 3.4rem;
+            line-height: 3.4rem;
+            background: #04d29d;
+            border: none;
+            border-radius: 50px;
+            -webkit-border-radius: 50px;
+            -moz-border-radius: 50px;
+            text-align: center;
+            position: fixed;
+            bottom: 3.84rem;
+            left: 8%;
+        }
+
+        .popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.3);
+            display: none;
+        }
+
+        .popupCon {
+            position: relative;
+            background: #fff;
+            width: 64%;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            margin: 30% auto 0;
+            padding: 0 1.28rem 2.1rem;
+        }
+
+        .popupCon h3 {
+            font-size: 1.536rem;
+            color: #000;
+            font-weight: normal;
+            text-align: center;
+            border-bottom: 1px solid #dedede;
+            line-height: 4.2rem;
+        }
+
+        .popupCon p {
+            font-size: 1.28rem;
+            color: #555555;
+            width: 90%;
+            line-height: 1.792rem;
+            margin: 1.28rem auto 1.92rem;
+        }
+
+        .popupCon .closeimg {
+            position: absolute;
+            top: 1.0rem;
+            right: 0.85rem;
+            width: 0.896rem;
+        }
+
+        .popupCon .okbutton2 {
+            font-size: 1.28rem;
+            color: #04d29d;
+            border: 1px solid #04d29d;
+            border-radius: 8px;
+            -webkit-border-radius: 8px;
+            -moz-border-radius: 8px;
+            width: 100%;
+            height: 2.56rem;
+            line-height: 2.56rem;
+            background: #fff;
+        }
+    </style>
+</head>
+<body>
+<form class="informationBox">
+    <p>
+        <label>姓名：</label>
+        <input id="name" type="text" name="name" onkeyup="throttle(lengthSubstr,null,this.id,10)">
+    </p>
+    <p>
+        <label>手机号：</label>
+        <input id="phone" type="tel" name="tel">
+    </p>
+    <p class="provinceLine">
+        <label>选择省：</label>
+        <select id="province" onchange="changeSelect(this);">
+            <option value="000000" style="color:#999;" disabled="disabled">-请选择省-</option>
+        </select>
+    </p>
+    <p class="cityLine">
+        <label>选择市：</label>
+        <select id="city" onchange="changeSelect(this);">
+            <option value="000000" style="color:#999;" disabled="disabled">-请选择市-</option>
+        </select>
+    </p>
+    <p class="districtLine">
+        <label>选择区：</label>
+        <select id="district">
+            <option value="000000" style="color:#999;" disabled="disabled">-请选区-</option>
+        </select>
+    </p>
+    <p class="addressLine">
+        <label>详细地址：</label>
+        <input id="address" type="text" name="address" value="" onkeyup="throttle(lengthSubstr,null,this.id,30)">
+    </p>
+</form>
+<p class="notes">注：用户需要支付快递费用，支付方式为“到付”。</p>
+<button class="okbutton1" type="submit" name="okBtn1">确定</button>
+<!--弹窗-->
+<div class="popup">
+    <div class="popupCon">
+        <h3>领取成功</h3>
+        <p>请注意查收邮件，奖品会在1-3个工作日内送达。</p>
+        <button class="okbutton2" type="submit" name="okBtn2">确定</button>
+        <img class="closeimg" src="../../images/info/cj-img6.png"/>
+    </div>
+</div>
+
+<script src="../../js/phone.js"></script>
+<script src="../../js/zepto.min.js"></script>
+<script src="../../js/getUrlParam.js"></script>
+<script src="../../js/getWddjUrl.js"></script>
+<script src="../../js/base64.js"></script>
+<script src="../../js/selectAddress.js"></script>
+<script type="text/javascript">
+    $(function () {
+        //获取token
+        var oToken = $.getUrlParam('token');
+//        var oToken = "1AFB60EB41637518CA55804331975EA1";
+//        console.log('oToken:' + oToken);
+        var prizetype = $.getUrlParam('prizetype');
+//        var prizetype = 3;
+        var prizeid = $.getUrlParam('prizeid');
+//        var prizeid = 153;
+//        console.log('id:' + prizeid);
+        var oHttp = getWddjUrl();
+        var base = new Base64();
+
+        //当奖品为 流量和话费充值卡的时候，不需要地址栏，将其隐藏
+        if (prizetype == 4) {
+            $('.provinceLine').hide();
+            $('.cityLine').hide();
+            $('.districtLine').hide();
+            $('.addressLine').hide();
+        }
+
+        //获取表单里的信息
+        $(".okbutton1").click(function () {
+
+            if (prizetype == 3) {
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+                var address = $('#address').val();
+                //province   city   district
+                var province = document.getElementById("province");
+                var city = document.getElementById("city");
+                var district = document.getElementById("district");
+                var pindex = province.selectedIndex; // 选中索引
+                var cindex = city.selectedIndex; // 选中索引
+                var dindex = district.selectedIndex; // 选中索引
+                var ptext = province.options[pindex].text; //   选择的省
+                var ctext = city.options[cindex].text; // 选择的市
+                var dtext = district.options[dindex].text; // 选择的区
+
+                //判断信息不为空
+                if (name == '' || phone == '') {
+                    alert("请输入姓名和手机号");
+                } else {
+
+                    //验证手机号是否符合规格
+                    if (isRightPhoneNumber(phone)) {
+                        //给后台发送信息
+                        sendInfo(base, oHttp, oToken, prizeid, name, phone, ptext, ctext, dtext, address);
+                    } else {
+                        alert("手机格式不正确");
+                    }
+                }
+            }
+            else if (prizetype == 4) {
+                var name = $('#name').val();
+                var phone = $('#phone').val();
+
+                //判断信息不为空
+                if (name == '' || phone == '') {
+                    alert("请输入姓名和手机号");
+                } else {
+
+                    //验证手机号是否符合规格
+                    if (isRightPhoneNumber(phone)) {
+                        //给后台发送信息
+                        sendInfo(base, oHttp, oToken, prizeid, name, phone);
+                    } else {
+                        alert("手机格式不正确");
+                    }
+                }
+            }
+
+        });
+
+        //显示提示框页面点击事件
+        $(".closeimg").click(function () {
+            $(".popup").hide();
+            //点击确定之后要跳转的事件
+//            window.location.href = "../winningDetail.html?token=" + oToken + "&prizeid=" + prizeid;
+            window.history.go(-1);
+        });
+        $(".okbutton2").click(function () {
+            $(".popup").hide();
+            //点击确定之后要跳转的事件
+//            window.location.href = "../winningDetail.html?token=" + oToken + "&prizeid=" + prizeid;
+            window.history.go(-1);
+        });
+    });
+
+    /**
+     * // 向后台发送领奖人信息
+     * @param base
+     * @param oHttp
+     * @param oToken
+     * @param id
+     * @param name
+     * @param phone
+     * @param province
+     * @param city
+     * @param region
+     * @param address
+     */
+    function sendInfo(base, oHttp, oToken, id, name, phone, province, city, region, address) {
+        var date = new Date();
+        var data = {
+            "token": oToken,
+            "id": id,
+            "recipientsName": name,
+            "recipientsPhone": phone,
+            "province": province || '无',
+            "city": city || '无',
+            "region": region || '无',
+            "detail": address || '无',
+            "time": date.getTime()
+        };
+//
+        var baseData = base.encode(JSON.stringify(data));
+        //去掉特殊的斜杠，已保证url地址的正确性
+        baseData = baseData.replace(new RegExp("/", "gm"), "*");
+        var url = "/luckGame/getPrize/";
+        url = oHttp + url + baseData;
+        $.ajax({
+            url: url,
+            type: "POST",
+            success: function (res) {
+                res = JSON.parse(res);
+//                console.log(res);
+                if (res.code == 1) {
+                    //显示提示框
+                    $(".popup").show();
+                } else {
+                    alert(res.msg)
+                }
+
+            }, error: function (err) {
+                console.log(err);
+                alert("网络错误，请重新加载");
+            }
+        })
+    }
+
+    /**
+     * //判断是不是一个手机号
+     * @param val
+     * @returns {number}
+     */
+    function isRightPhoneNumber(val) {
+        var re = /^(13[0-9]{9})|(15[0-9][0-9]{8})|(18[0-9][0-9]{8})|(17[0][0-9]{8})|(14[7][0-9]{8})$/;
+        if (!re.test(val)) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }
+
+    /**
+     * 限制输入长度的方法
+     * @param x
+     * @param len
+     */
+    function lengthSubstr(x, len) {
+
+        var y = document.getElementById(x).value;
+        document.getElementById(x).value = y.substr(0, len);
+
+    }
+
+    /**
+     * 函数节流 ，限制输入法写去长度的方法调用的时间
+     * @param method
+     * @param context
+     * @param x
+     * @param len
+     */
+    function throttle(method, context, x, len) {
+        clearTimeout(method.tId);
+        method.tId = setTimeout(function () {
+            method.call(context, x, len);
+        }, 1000);
+    }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+详情 d-开头
+d-xxx.jpg 
+
+1。幸运转盘：
+
+奖品地址
+../../images/prizeImg/1-1.png	转盘 7 等奖 	1积分
+../../images/prizeImg/1-2.png	转盘 8 等奖 	未中奖
+../../images/prizeImg/1-3.png	转盘 5 等奖	京东券
+../../images/prizeImg/1-4.png	转盘 3 等奖	平衡车一部
+../../images/prizeImg/1-5.png	转盘 4 等奖	充值卡
+../../images/prizeImg/1-6.png	转盘 6 等奖	2元优惠券
+../../images/prizeImg/1-7.png	转盘 1 等奖	华为Mate10手机一部
+../../images/prizeImg/1-8.png	转盘 2 等奖	Apple Watch
+
+抽中奖奖品地址
+../../images/prizeImg/jp-1-1.png	转盘 7 等奖 	1积分
+../../images/prizeImg/jp-1-2.png	转盘 8 等奖 	未中奖
+../../images/prizeImg/jp-1-3.png	转盘 5 等奖	京东券
+../../images/prizeImg/jp-1-4.png	转盘 3 等奖	平衡车一部
+../../images/prizeImg/jp-1-5.png	转盘 4 等奖	充值卡
+../../images/prizeImg/jp-1-6.png	转盘 6 等奖	2元优惠券
+../../images/prizeImg/jp-1-7.png	转盘 1 等奖	华为Mate10手机一部
+../../images/prizeImg/jp-1-8.png	转盘 2 等奖	Apple Watch
+
+
+2。魔术扑克：
+
+奖品地址
+../../images/prizeImg/2-1.png	魔术扑克 5 等奖 	2元优惠券
+../../images/prizeImg/2-2.png	魔术扑克 1 等奖 	华为Mate10手机一部
+../../images/prizeImg/2-3.png	魔术扑克 6 等奖		2积分
+../../images/prizeImg/2-4.png	魔术扑克 3 等奖		平衡车一部
+../../images/prizeImg/2-5.png	魔术扑克 4 等奖		京东优惠券
+../../images/prizeImg/2-6.png	魔术扑克 2 等奖		Apple Watch
+
+抽奖奖品地址
+	同上
+
+
+
+3。砸蛋壳：
+
+奖品地址
+../../images/prizeImg/3-1.png	砸蛋壳 1 等奖 	华为Mate10手机一部
+../../images/prizeImg/3-2.png	砸蛋壳 2 等奖 	Apple Watch
+../../images/prizeImg/3-3.png	砸蛋壳 3 等奖	平衡车一部
+../../images/prizeImg/3-4.png	砸蛋壳 4 等奖	京东优惠券
+../../images/prizeImg/3-5.png	砸蛋壳 5 等奖	2元优惠券
+
+
+抽奖奖品地址
+../../images/prizeImg/jp-3-1.png	砸蛋壳 1 等奖 	华为Mate10手机一部
+../../images/prizeImg/jp-3-2.png	砸蛋壳 2 等奖 	Apple Watch
+../../images/prizeImg/jp-3-3.png	砸蛋壳 3 等奖	平衡车一部
+../../images/prizeImg/jp-3-4.png	砸蛋壳 4 等奖	京东优惠券
+../../images/prizeImg/jp-3-5.png	砸蛋壳 5 等奖	2元优惠券
+
+
+
+
+
+
+
