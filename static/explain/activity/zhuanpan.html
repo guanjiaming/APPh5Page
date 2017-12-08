@@ -8,6 +8,8 @@
     <title>幸运转盘</title>
     <link rel="stylesheet" href="../../css/zhuanpan/bootstrap.min.css"/>
     <link rel="stylesheet" href="../../css/zhuanpan/style-cj.css"/>
+    <link rel="stylesheet" href="../../css/noIntegralTipStyle.css"/>
+    <link rel="icon" type="image/x-icon" href="../../images/favicon.ico"/>
 </head>
 <body>
 <div class="main">
@@ -21,7 +23,7 @@
     <!-- 音频文件结束 -->
 
     <span id="winningLogBtn"
-          style="font-size: 16px;z-index:1;text-align: center;line-height: 40px;height:40px;width:70px;position: absolute;top: 10px;right: 10px;color:#fff;text-decoration: none;">中奖纪录</span>
+          style="font-size: 14px;z-index:1;text-align: center;line-height: 40px;height:40px;width:70px;position: absolute;top: 10px;right: 10px;color:#fff;text-decoration: none;">中奖纪录</span>
     <div class="banner"><img src="../../images/zhuanpan/cj-banner.jpg"/></div>
     <div class="contentBox">
         <div class="main-header">
@@ -80,6 +82,18 @@
     </div>
 </div>
 
+<!-- dialog2 无积分提示 -->
+<div id="dialogNoIntegral" class="dialogNoIntegral">
+    <div class="dialogNoIntegralMain">
+        <!-- 关闭按钮 -->
+        <div id="dialogNoIntegralCloseBtn" class="dialogNoIntegralCloseBtn"></div>
+        <!-- 提示文字 -->
+        <p class="errTip">失败</p>
+        <p class="errText">您的积分不足</p>
+        <div id="dialogNoIntegralOKBtn" class="dialogNoIntegralOKBtn">确定</div>
+    </div>
+</div>
+
 <script src="../../js/phone.js"></script>
 <script src="../../js/jquery-3.1.1.min.js"></script>
 <script src="../../js/bootstrap.min.js"></script>
@@ -99,6 +113,7 @@
     ];
     var result_index; // 的最终要旋转到哪一 块，对应result_angle下标
     var productImgSrcArr = [];  //存放奖品图片的路径
+
     //抽奖转盘配置
     var rotate = {
         rotate_angle: 0, //起始位置为0
@@ -164,7 +179,7 @@
 //                console.log(nun1);
                 //积分不足，则不能进行抽奖
                 if (parseInt(nun1) <= 1) {
-                    $("#tip").attr("src", "images/zhuanpan/cj-img5.png");
+                    $("#tip").attr("src", "../../images/zhuanpan/cj-img5.png");
                     return false;
                 }
             }, during_time * 1000);
@@ -173,8 +188,10 @@
 
     //纪录奖品类型 zpType
     var zpType;
+
     //纪录奖品id  zpId
     var zpId;
+
     // 纪录京东优惠券url
     var zpJDurl;
 
@@ -194,9 +211,12 @@
 
         //获取token
         var oToken = $.getUrlParam('token');
-//        var oToken = "B1162BDE2D1A6A3AB97C6A3437A94F7F";
+
+        // token不存在，直接结束程序
+        if (!oToken) return;
+
         var oHttp = getWddjUrl();
-//        console.log(oToken);
+
         var base = new Base64();
 
         var wdLotteryMusic = document.getElementById("wdLotteryMusic");//获取音频id
@@ -205,7 +225,12 @@
         var nun1;
 
         //获取用户积分，并设置到页面
-        getIntegral(oHttp, oToken, base);
+        getIntegral(oHttp, oToken, base, function () {
+            if (parseInt(nun1) <= 1) {
+                $("#tip").attr("src", "../../images/zhuanpan/cj-img5.png");
+                return false;
+            }
+        });
 
         //设置抽奖数据
         getProduct(oHttp, 1, oToken, base);  //抽奖等级,1: 幸运转盘,2: 魔术扑克,3: 一锤定音,是否必须: 是
@@ -218,7 +243,9 @@
             nun1 = $(".coud_num").html();
             //积分过少，禁止抽奖
             if (parseInt(nun1) <= 1) {
-                alert("积分不足");
+//                alert("积分不足");
+                $('.dialogNoIntegral').show();
+
                 $("#tip").attr("src", "../../images/zhuanpan/cj-img5.png");
                 return false;
             }
@@ -269,6 +296,14 @@
 //            else if (zpType == 5) {
 //                window.location.href = zpJDurl;
 //            }
+        });
+
+        // 关闭-积分不足提示
+        $('#dialogNoIntegralCloseBtn').click(function () {
+            $('#dialogNoIntegral').hide();
+        });
+        $('#dialogNoIntegralOKBtn').click(function () {
+            $('#dialogNoIntegral').fadeOut();
         });
 
         //跳转到中奖列表
@@ -389,7 +424,7 @@
                     if (callback) callback();
 
                 } else {
-                    alert(res.msg);
+//                    alert(res.msg);
                 }
             },
             error: function (err) {
@@ -439,7 +474,7 @@
                     //剩余积分数
                     $(".coud_num").html(res.resData.integral);//设置 我的积分num
                 } else {
-                    alert(res.msg)
+//                    alert(res.msg)
                 }
             },
             error: function (err) {

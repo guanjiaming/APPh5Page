@@ -39,7 +39,8 @@ requirejs(['jquery', 'require', 'carousel', 'oalert'],
                 var jifen = $(".myjifen .integralNum").text();
                 // console.log(jifen);
                 if (jifen < 10) {
-                    alert("积分不足");
+                    $('#dialogNoIntegral').show();
+
                 } else {
                     $(".myjifen .integralNum").text(jifen - 10);
 
@@ -78,6 +79,14 @@ requirejs(['jquery', 'require', 'carousel', 'oalert'],
             $('body').on('touchmove', '.loadingDiv', function (event) {
                 event.preventDefault();
             }, false);
+
+            // 关闭-积分不足提示
+            $('#dialogNoIntegralCloseBtn').click(function () {
+                $('.dialogNoIntegral').hide();
+            });
+            $('#dialogNoIntegralOKBtn').click(function () {
+                $('.dialogNoIntegral').fadeOut();
+            });
 
         });
 

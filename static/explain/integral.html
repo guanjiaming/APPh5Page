@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="format-detection" content="telephone=no"/>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
     <title>我的积分</title>
     <style type="text/css">
         * {
@@ -89,7 +90,7 @@
 
     <!--  上面这一部分  -->
     <div class="myIntegral">
-        <span class="integralNum">8888</span>
+        <span class="integralNum">888</span>
         <div id="goIntegralBtn" class="goIntegral">
             <img src="../images/Instructions/goLottery.png" alt="goIntegralBtn">
         </div>
@@ -117,12 +118,7 @@
     $(function () {
         var base = new Base64();
         var oToken = $.getUrlParam('token');
-
-        //没有token 终止进程
-        if (!oToken) return;
-
         var oHttp = getWddjUrl();
-
         //获取积分并且设置到页面
         getIntegral(oHttp, oToken, base);
 
@@ -139,10 +135,10 @@
          */
         function getIntegral(oHttp, oToken, base) {
             var date = new Date();
-            var data = {"token": oToken, "time": date.getTime()};
+            var data = {"token": oToken,"time": date.getTime()};
             var baseData = base.encode(JSON.stringify(data));
             //去掉特殊的斜杠，已保证url地址的正确性
-            baseData = baseData.replace(new RegExp("/", "gm"), "*");
+            baseData = baseData.replace(new RegExp("/","gm"),"*");
             //拼接参数
             var url = "/luckGame/getIntegral/";
             url = oHttp + url + baseData;
@@ -152,9 +148,8 @@
                 type: "POST",
                 success: function (res) {
                     res = JSON.parse(res);
-                    console.log(res);
                     if (res.code == 1) {
-                        $(".integralNum").text(res.resData.integral);
+                        $(".integralNum").text(res.resData.integral)
                     }
                 },
                 error: function (err) {

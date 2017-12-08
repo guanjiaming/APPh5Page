@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="format-detection" content="telephone=no"/>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico"/>
     <title>版本说明</title>
     <style type="text/css">
         * {
@@ -100,20 +101,20 @@
         }
 
         /* 需要隐藏和显示的内容 */
-        .wdslideToggle{
+        .wdslideToggle {
             display: block;
             /*transition: all 0.3s;*/
             position: relative;
-            -webkit-animation: myMove 0.5s ;
-            -o-animation: myMove 0.5s ;
-            animation: myMove 0.5s ;
+            -webkit-animation: myMove 0.5s;
+            -o-animation: myMove 0.5s;
+            animation: myMove 0.5s;
         }
 
         @keyframes myMove {
-            from{
+            from {
                 transform: translateY(-800px);
             }
-            to{
+            to {
                 transform: translateY(0);
             }
         }
@@ -125,17 +126,17 @@
     <ul id="wdVlist">
         <!-- 静态样式模板 -->
         <!--<li>-->
-            <!--<div class="wdVlistTop">-->
-                <!--<p class="wdVlistName">微东到家3.0.1主要更新</p>-->
-                <!--<p class="wdVlistDate">2017年12月27日</p>-->
-                <!--<span class="rightArrows"></span>-->
-            <!--</div>-->
-            <!--&lt;!&ndash; 展开的列表内容 &ndash;&gt;-->
-            <!--<ol class="wdVlistDetail">-->
-                <!--<li>1.版本更新</li>-->
-                <!--<li>2.版本再次更新</li>-->
-                <!--<li>3.版本又一次更新</li>-->
-            <!--</ol>-->
+        <!--<div class="wdVlistTop">-->
+        <!--<p class="wdVlistName">微东到家3.0.1主要更新</p>-->
+        <!--<p class="wdVlistDate">2017年12月27日</p>-->
+        <!--<span class="rightArrows"></span>-->
+        <!--</div>-->
+        <!--&lt;!&ndash; 展开的列表内容 &ndash;&gt;-->
+        <!--<ol class="wdVlistDetail">-->
+        <!--<li>1.版本更新</li>-->
+        <!--<li>2.版本再次更新</li>-->
+        <!--<li>3.版本又一次更新</li>-->
+        <!--</ol>-->
         <!--</li>-->
     </ul>
 </div>
@@ -189,7 +190,7 @@
         });
 
         //点击展开事件
-        $("body").on('tap','#wdVlist>li',function () {
+        $("body").on('tap', '#wdVlist>li', function () {
             $(this).find('.wdVlistDetail').toggle();
             $(this).find('.rightArrows').toggleClass("rightArrowsCurrent");
         });
@@ -227,7 +228,7 @@
          */
         function getV(oHttp, base, phoneType, pageNo, callback) {
             var date = new Date();
-            var data = {"type": phoneType, "pageNo": pageNo,"time": date.getTime()};
+            var data = {"type": phoneType, "pageNo": pageNo, "time": date.getTime()};
             var baseData = base.encode(JSON.stringify(data));
             //去掉特殊的斜杠，已保证url地址的正确性
             baseData = baseData.replace(new RegExp("/", "gm"), "*");
@@ -240,20 +241,20 @@
                 type: "GET",
                 success: function (res) {
                     res = JSON.parse(res);
-//                    console.log(res);
+                    console.log(res);
                     if (res.code == 1) {
                         //遍历创建dom节点
                         $.each(res.resData, function (index, ele) {
 
                             var descArr = ele.description.split("|");
-//                            console.log(descArr);
+                            console.log(descArr);
                             var oLi = $('<li></li>');
                             var oOl = $('<ol class="wdVlistDetail"></ol>');
 
                             oLi.html(
                                 '<div class="wdVlistTop">' +
-                                '<p class="wdVlistName">微东到家3.0.1主要更新</p>' +
-                                '<p class="wdVlistDate">2017年12月27日</p>' +
+                                '<p class="wdVlistName">微东到家' + ele.name + '主要更新</p>' +
+                                '<p class="wdVlistDate">' + ele.date + '</p>' +
                                 '<span class="rightArrows"></span>' +
                                 '</div>'
                             );
@@ -261,7 +262,7 @@
                             // 遍历添加ol
                             $.each(descArr, function (index, ele) {
 //                                console.log(ele);
-                                var wdli = $('<li>'+ ele +'</li>');
+                                var wdli = $('<li>' + ele + '</li>');
                                 oOl.append(wdli);
                             });
 

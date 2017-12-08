@@ -6,6 +6,7 @@
     <meta name="format-detection" content="telephone=no"/>
     <title>抽奖中心</title>
     <link rel="stylesheet" type="text/css" href="../css/common.css"/>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico" />
 </head>
 <body style="background:#f3f7f7;">
 <div class="activityCenter">
@@ -22,19 +23,14 @@
     $(function () {
         // 获取token
         var oToken = $.getUrlParam('token');
-        //没有token 终止进程
-        if (!oToken) return;
-
         //跳转到幸运大转盘
         $('.zhuanpan').tap(function () {
             window.location.href = "activity/zhuanpan.html?token=" + oToken;
         });
-
         //跳转到一锤定音
         $('.zajindan').tap(function () {
             window.location.href = "activity/zaJinDan.html?token=" + oToken;
         }) ;
-
         //跳转到魔法卡牌
         $('.card').tap(function () {
             window.location.href = "activity/cardLottery.html?token=" + oToken;

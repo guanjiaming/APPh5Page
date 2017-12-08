@@ -571,7 +571,7 @@ input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
 .zhongjiangList li .prolink .proimg {
     float: left;
     width: 25%;
-    border: 1px solid #dedede;
+    /*border: 1px solid #dedede;*/
 }
 
 .zhongjiangList li .prolink .JPintro {

@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="format-detection" content="telephone=no"/>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico"/>
     <title>中奖纪录</title>
     <link rel="stylesheet" type="text/css" href="../css/common.css"/>
     <style>
@@ -19,7 +20,7 @@
             height: 40px;
             z-index: 1;
             color: #fff;
-            /*display: none;*/
+            display: block;
             -webkit-transform: translate3d(0, 0, 0);
             -moz-transform: translate3d(0, 0, 0);
             -ms-transform: translate3d(0, 0, 0);
@@ -44,6 +45,32 @@
             animation: wdDown 4s;
         }
 
+        .nolist {
+            display: none;
+            margin-top: 50%;
+        }
+
+        .nolistMain {
+            text-align: center;
+        }
+
+        .nolistImg {
+            width: 112px;
+            height: 112px;
+        }
+
+        .tipText {
+            color: #555555;
+            font-size: 14px;
+            margin-top: 15px;
+        }
+
+        .tipText2 {
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
         @keyframes wdDown {
             0% {
                 top: -40px;
@@ -66,29 +93,38 @@
                 opacity: 0
             }
         }
-
     </style>
 </head>
 <body style="background:#f3f7f7;">
 
 <div id="dialog" class="dialog">
-    <p class="dialogTit">领取成功，请稍后查看领取状态</p>
+    <p class="dialogTit">领取成功</p>
 </div>
+
 
 <ul id="prizeList" class="zhongjiangList">
     <!--<li>-->
-    <!--<a class="prolink" href="###">-->
-    <!--<img class="proimg" src="images/proimg1.jpg" alt="商品图片"/>-->
-    <!--<div class="JPintro">-->
-    <!--<div class="JPname">-->
-    <!--<span>小米手环</span><span>配送中</span>-->
-    <!--</div>-->
-    <!--<div class="JPword">电提醒 久坐提醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</div>-->
-    <!--<div class="JPtime"><span>中奖时间：</span><span>2017.08.22</span><span>11:55</span></div>-->
-    <!--</div>-->
-    <!--</a>-->
+        <!--<a class="prolink" href="###">-->
+            <!--<img class="proimg" src="../images/prizeImg/d-1jifen.jpg" alt="商品图片"/>-->
+            <!--<div class="JPintro">-->
+                <!--<div class="JPname">-->
+                    <!--<span>小米手环</span><span class="prizeStatus">已领取</span>-->
+                <!--</div>-->
+                <!--<div class="JPword">电提醒 久坐提醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</div>-->
+                <!--<div class="JPtime"><span>中奖时间：</span><span>2017.08.22</span><span>11:55</span></div>-->
+            <!--</div>-->
+        <!--</a>-->
     <!--</li>-->
 </ul>
+
+<!--  弹窗  -->
+<div class="nolist">
+    <div class="nolistMain">
+        <img class="nolistImg" src="../images/Instructions/nohavelist.png">
+        <p class="tipText">亲，还没有奖品</p>
+        <p class="tipText2">快去抽奖吧～</p>
+    </div>
+</div>
 <script src="../js/phone.js"></script>
 <script src="../js/zepto.min.js"></script>
 <script src="../js/touch.js"></script>
@@ -100,17 +136,15 @@
     var jdurl;
     $(function () {
         var oToken = $.getUrlParam('token');
-//        if (!oToken) {
-//            alert('请登录后再来!');
-//        }
+
         var oHttp = getWddjUrl();
         var base = new Base64();
         var pageNo = 1;
 
-//      加载中奖列表
+        // 加载中奖列表
         getPrizeList(oToken, oHttp, base, pageNo);
 
-        //当窗口滚动的时候 加载数据
+        // 当窗口滚动的时候 加载数据
         $(window).on('scroll', function () {
             //是否符合加载条件
             if (checkWillLoadBox()) {
@@ -125,35 +159,47 @@
             }
         });
 
-        //点击事件li
+        // 点击事件li
         $("body").on("tap", "li", function () {
             var wdtype = $(this).attr('wdtype');
             var wdid = $(this).attr('wdid');
             var wdstatus = $(this).attr('wdstatus');
-
-            //1 判断是否领取 0未领取 1已领取 2 已过期
+            var self = $(this);
+            // 1 判断是否领取 0未领取 1已领取 2 已过期
             if (wdstatus == 0) {
-                //1.1判断类型，是否可以跳转到领奖页面
+                // 1.1判断类型，是否可以跳转到领奖页面
                 if (wdtype == 3) {
                     window.location.href = 'activity/fillInformation.html?token=' + oToken + '&prizeid=' + wdid + '&prizetype=' + wdtype
                 }
-                //直接发送ajax
+                // 直接发送ajax
                 else if (wdtype == 5 || wdtype == 4) {
+
+                    if (wdtype == 5) {
+                        self.find('.prizeStatus').text('已领取');
+                    }
                     lingjiang(oHttp, base, oToken, wdid);
+                    setTimeout(function () {
+                        getJDurl(oToken, oHttp, base, wdid)
+                    },4000);
                 }
             }
-            //2 已领取，跳转到详情
+            // 2 已领取，跳转到详情
             else if (wdstatus == 1) {
-                //判断类型 - 跳转到详情
+                // 判断类型 - 跳转到详情
                 if (wdtype == 3 || wdtype == 4) {
                     window.location.href = "winningDetail.html?token=" + oToken + "&prizeid=" + wdid;
                 } else if (wdtype == 5) {
                     getJDurl(oToken, oHttp, base, wdid);
                 }
             }
-            //3
+            // 3
             else if (wdstatus == 2) {
-                alert("已过期，不可领取");
+//                alert("已过期，不可领取");
+                $('.dialogTit').text("已过期，不可领取");
+                $("#dialog").addClass('dialogErrColor');
+                setTimeout(function () {
+                    $("#dialog").removeClass('dialogSuccessColor');
+                }, 4000);
             }
         });
 
@@ -169,10 +215,10 @@
             var date = new Date();
             var data = {"token": oToken, "pageNo": pageNo, "time": date.getTime()};
             var baseData = base.encode(JSON.stringify(data));
-            //去掉特殊的斜杠，已保证url地址的正确性
+            // 去掉特殊的斜杠，已保证url地址的正确性
             baseData = baseData.replace(new RegExp("/", "gm"), "*");
             url = oHttp + url + baseData;
-            //console.log(url);
+            // console.log(url);
             $.ajax({
                 url: url,
                 type: "GET",
@@ -181,15 +227,17 @@
 //                    console.log(res);
                     var oStatus;
                     var oHref;
+
                     if (res.code == 1) {
 
                         //如果没有中奖奖品
                         if (res.resData.length == 0) {
-                            $('.dialogTit').text("您还没有中奖奖品，赶快去抽奖吧~");
-                            $("#dialog").addClass('dialogSuccessColor');
-                            setTimeout(function () {
-                                $("#dialog").removeClass('dialogSuccessColor');
-                            }, 4000);
+                            $('.nolist').show();
+//                            $('.dialogTit').text("您还没有中奖奖品，赶快去抽奖吧~");
+//                            $("#dialog").addClass('dialogSuccessColor');
+//                            setTimeout(function () {
+//                                $("#dialog").removeClass('dialogSuccessColor');
+//                            }, 4000);
                         }
 
                         $.each(res.resData, function (index, ele) {
@@ -203,7 +251,6 @@
                             //已经失效，不能领取
                             else if (ele.status == 2) {
                                 oStatus = "已失效,不可领取";
-
                             }
 
                             //创建dom元素
@@ -213,7 +260,7 @@
                                 '<img class="proimg" src="' + ele.imgUrl + '" alt="商品图片"/>' +
                                 '<div class="JPintro">' +
                                 '<div class="JPname">' +
-                                '<span>' + ele.name + '</span><span>' + oStatus + '</span>' +
+                                '<span>' + ele.name + '</span><span class="prizeStatus">' + oStatus + '</span>' +
                                 '</div>' +
                                 '<div class="JPword">' + ele.description + '</div>' +
                                 '<div class="JPtime"><span>中奖时间：</span><span>' + ele.createTime + '</span></div>' +
@@ -224,7 +271,7 @@
 
                         if (callback) callback();
 
-                        //没有数据是，不在向后台请求数据
+                        // 没有数据是，不在向后台请求数据
                         if (res.resData.length < 10) {
                             flag = false;
                         }
@@ -234,8 +281,7 @@
                     }
                 },
                 error: function (err) {
-//                    console.log(err);
-                    alert("网络错误，请重新加载");
+//                    alert("网络错误，请重新加载");
                 }
             })
         }
@@ -290,7 +336,7 @@
 //                        alert("领取成功,请稍后查看领取状态");
 //                        jdurl = resData;
 
-                        $('.dialogTit').text("领取成功，请稍后查看领取状态");
+                        $('.dialogTit').text("领取成功，即将跳转");
                         $("#dialog").addClass('dialogSuccessColor');
                         setTimeout(function () {
                             $("#dialog").removeClass('dialogSuccessColor');
@@ -300,16 +346,17 @@
 //                        window.location.reload();
                         if (callback) callback();
                     } else {
-//                        alert(res.msg)
+                        //alert(res.msg)
                         $('.dialogTit').text(res.msg);
                         $("#dialog").addClass('dialogErrColor');
                         setTimeout(function () {
                             $("#dialog").removeClass('dialogErrColor');
                         }, 4000);
                     }
+
                 }, error: function (err) {
                     console.log(err);
-                    alert("网络错误，请重新加载");
+//                    alert("网络错误，请重新加载");
                 }
             })
         }
@@ -352,7 +399,7 @@
                 },
                 error: function (err) {
 //                    console.log(err);
-                    alert("网络错误，请重新加载");
+//                    alert("网络错误，请重新加载");
                 }
             })
         }

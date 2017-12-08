@@ -1,12 +1,12 @@
 /**
- * 返回微东到家url
+ * 返回微东到家的域名
  * @returns {string}
  */
 function getWddjUrl() {
     // return "http://t.bjwddj.com";
     // return "http://local.bjwddj.com:9999";
-    // return "http://test.bjwddj.com";
-    return " http://re.bjwddj.com"
+    // return "http://re.bjwddj.com";
+    return "http://re.shijiweidong.com";
 }
 
 /**

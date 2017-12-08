@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta name="format-detection" content="telephone=no"/>
+    <link rel="icon" type="image/x-icon" href="../images/favicon.ico"/>
     <title>奖品详情</title>
     <style>
         * {
@@ -126,43 +127,38 @@
 </head>
 <body>
 <div class="content">
-    <!--  顶部商品图片  -->
+    <!--顶部商品图片-->
     <!--<div class="productImg">-->
-    <!--<img src="images/Instructions/produImg.jpg" alt="">-->
+        <!--<img src="../images/prizeImg/d-huawei.jpg" alt="">-->
     <!--</div>-->
 
-    <!-- 商品信息 -->
+    <!--商品信息-->
     <!--<div class="productDetail">-->
-    <!--<div class="productName clearfix">-->
-    <!--<h1>小米手环</h1>-->
-    <!--<span>配送中</span>-->
-    <!--</div>-->
-    <!--<div class="productDesc">-->
-    <!--<p>小米（MI）小米手环2 智能运动 心率监测 来电提醒 久坐提 醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</p>-->
-    <!--</div>-->
-    <!--<div class="productPrice">-->
-    <!--<p>¥ 149.00</p>-->
-    <!--</div>-->
+        <!--<div class="productName clearfix">-->
+            <!--<h1>小米手环</h1>-->
+            <!--<span>配送中</span>-->
+        <!--</div>-->
+        <!--<div class="productDesc">-->
+            <!--<p>小米（MI）小米手环2 智能运动 心率监测 来电提醒 久坐提 醒 LED显示屏 时间显示 防水计步器 无感腕带 黑色</p>-->
+        <!--</div>-->
+        <!--<div class="productPrice">-->
+            <!--<p>¥ 149.00</p>-->
+        <!--</div>-->
     <!--</div>-->
 
-    <!--  其他信息  -->
+    <!--其他信息-->
     <!--<div class="otherInfo">-->
-    <!--<p class="otherInfoTitle">收件人信息</p>-->
-    <!--<div class="otherInfoDesc">-->
-    <!--<p>姓名：吴邪 </p>-->
-    <!--<p>手机号：15941234567</p>-->
-    <!--<p>收件地址：北京市东城区广渠家园24号楼3单元210</p>-->
-    <!--</div>-->
-    <!--<p class="otherInfoTitle">配送信息</p>-->
-    <!--<div class="otherInfoDesc">-->
-    <!--<p>配送方：圆通快递</p>-->
-    <!--<p>快递单号：159410488393234567</p>-->
-    <!--</div>-->
-    <!--</div>-->
-
-    <!--  领奖按钮  -->
-    <!--<div class="gotoGetPrizeBtn">-->
-    <!--<a href="###">立即领取</a>-->
+        <!--<p class="otherInfoTitle">收件人信息</p>-->
+        <!--<div class="otherInfoDesc">-->
+            <!--<p>姓名：吴邪 </p>-->
+            <!--<p>手机号：15941234567</p>-->
+            <!--<p>收件地址：北京市东城区广渠家园24号楼3单元210</p>-->
+        <!--</div>-->
+        <!--<p class="otherInfoTitle">配送信息</p>-->
+        <!--<div class="otherInfoDesc">-->
+            <!--<p>配送方：圆通快递</p>-->
+            <!--<p>快递单号：159410488393234567</p>-->
+        <!--</div>-->
     <!--</div>-->
 </div>
 
@@ -202,7 +198,7 @@
             type: "GET",
             success: function (res) {
                 res = JSON.parse(res);
-                console.log(res);
+//                console.log(res);
                 //code = 1 表示请求成功
                 if (res.code == 1) {
 
@@ -217,12 +213,12 @@
                     }
                 }
                 else {
-                    alert(res.msg);
+//                    alert(res.msg);
                 }
             },
             error: function (err) {
 //                console.log(err);
-                alert("网络错误，请重新加载");
+//                alert("网络错误，请重新加载");
             }
         })
     }

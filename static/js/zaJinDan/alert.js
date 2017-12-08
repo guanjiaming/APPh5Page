@@ -56,6 +56,14 @@ define(function () {
                     window.location.href = "../winningLog.html?token=" + oToken;
                 }
             })
+
+            // 关闭-积分不足提示
+            $('#dialogNoIntegralCloseBtn').click(function () {
+                $('#dialogNoIntegral').hide();
+            });
+            $('#dialogNoIntegralOKBtn').click(function () {
+                $('#dialogNoIntegral').fadeOut();
+            });
         });
 
         setTimeout(function () {
@@ -185,7 +193,7 @@ define(function () {
                     // 如果有回调函数，就执行回调函数
                     if (callback) callback();
                 } else {
-                    alert(res.msg)
+                    // alert(res.msg)
                 }
 
             },
